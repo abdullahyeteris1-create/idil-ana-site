@@ -1,7 +1,7 @@
 "use client";
 
 import Image from "next/image";
-import { useState } from "react";
+import { useRef, useState } from "react";
 import { motion } from "framer-motion";
 import {
   ArrowRight,
@@ -294,6 +294,7 @@ export default function Home() {
   const [activeGroupId, setActiveGroupId] = useState("ilkokul-1-2");
   const [activeInfoTab, setActiveInfoTab] = useState("egitim");
   const [isWhatsAppChatOpen, setIsWhatsAppChatOpen] = useState(false);
+  const googleReviewsTrackRef = useRef<HTMLDivElement>(null);
 
   const activeGroup =
     educationGroups.find((group) => group.id === activeGroupId) ??
@@ -302,6 +303,12 @@ export default function Home() {
     infoTabs.find((tab) => tab.id === activeInfoTab) ?? infoTabs[0];
   const ActiveGroupIcon = activeGroup.icon;
   const ActiveInfoIcon = activeInfo.icon;
+  const scrollGoogleReviews = (direction: "previous" | "next") => {
+    googleReviewsTrackRef.current?.scrollBy({
+      left: direction === "next" ? 340 : -340,
+      behavior: "smooth",
+    });
+  };
 
   return (
     <main className="min-h-screen overflow-x-hidden bg-[#fff7f5] text-slate-950">
@@ -659,43 +666,80 @@ export default function Home() {
             <h2 className="mt-3 text-3xl font-black tracking-tight text-red-950 sm:text-4xl">
               Google Yorumlarımız
             </h2>
+            <p className="mt-3 leading-7 text-slate-600">
+              Velilerimizin Google üzerinden paylaştığı gerçek
+              değerlendirmelerden bazıları.
+            </p>
           </div>
 
-          <div className="relative mt-6 overflow-hidden">
+          <div className="relative mt-6">
             <div className="pointer-events-none absolute left-0 top-0 z-10 h-full w-12 bg-gradient-to-r from-[#fff7f5] to-transparent" />
             <div className="pointer-events-none absolute right-0 top-0 z-10 h-full w-12 bg-gradient-to-l from-[#fff7f5] to-transparent" />
 
-            <div className="google-reviews-marquee flex w-max gap-4 py-2">
-              {[...googleReviews, ...googleReviews].map((item, index) => (
-                <Card
-                  key={`${item.name}-${index}`}
-                  className={`h-[240px] w-[290px] shrink-0 rounded-3xl border border-red-100 bg-white shadow-sm sm:w-[320px] ${cardHover}`}
-                >
-                  <CardContent className="flex h-full flex-col p-5">
-                    <div className="mb-3 flex items-center justify-between gap-3">
-                      <div className="flex gap-1 text-orange-400">
-                        {[1, 2, 3, 4, 5].map((star) => (
-                          <Star key={star} className="h-4 w-4 fill-current" />
-                        ))}
+            <button
+              type="button"
+              onClick={() => scrollGoogleReviews("previous")}
+              className="absolute left-2 top-1/2 z-20 hidden h-10 w-10 -translate-y-1/2 items-center justify-center rounded-full border border-red-100 bg-white/95 text-red-700 shadow-lg transition hover:-translate-x-0.5 hover:bg-red-50 md:flex"
+              aria-label="Önceki Google yorumlarını göster"
+            >
+              <ArrowRight className="h-5 w-5 rotate-180" />
+            </button>
+
+            <button
+              type="button"
+              onClick={() => scrollGoogleReviews("next")}
+              className="absolute right-2 top-1/2 z-20 hidden h-10 w-10 -translate-y-1/2 items-center justify-center rounded-full border border-red-100 bg-white/95 text-red-700 shadow-lg transition hover:translate-x-0.5 hover:bg-red-50 md:flex"
+              aria-label="Sonraki Google yorumlarını göster"
+            >
+              <ArrowRight className="h-5 w-5" />
+            </button>
+
+            <div
+              ref={googleReviewsTrackRef}
+              data-google-reviews-track
+              className="overflow-x-auto overflow-y-hidden scroll-smooth pb-2 [scrollbar-width:none]"
+            >
+              <div className="google-reviews-marquee flex w-max gap-4 py-2">
+                {[...googleReviews, ...googleReviews].map((item, index) => (
+                  <Card
+                    key={`${item.name}-${index}`}
+                    className={`h-[240px] w-[290px] shrink-0 overflow-hidden rounded-3xl border border-red-100 bg-white shadow-sm sm:w-[320px] ${cardHover}`}
+                  >
+                    <CardContent className="flex h-full flex-col p-0">
+                      <div className="h-1.5 bg-gradient-to-r from-red-700 via-red-500 to-orange-400" />
+
+                      <div className="flex h-full flex-col p-5">
+                        <div className="mb-3 flex items-center justify-between gap-3">
+                          <div className="flex gap-1 text-orange-400">
+                            {[1, 2, 3, 4, 5].map((star) => (
+                              <Star
+                                key={star}
+                                className="h-4 w-4 fill-current"
+                              />
+                            ))}
+                          </div>
+                          <span className="rounded-full bg-red-50 px-3 py-1 text-[11px] font-bold text-red-700">
+                            {item.source}
+                          </span>
+                        </div>
+
+                        <p className="google-review-text flex-1 leading-7 text-slate-600">
+                          &quot;{item.text}&quot;
+                        </p>
+
+                        <div className="mt-3 border-t border-red-50 pt-3">
+                          <p className="font-black text-red-950">
+                            {item.name}
+                          </p>
+                          <p className="mt-1 text-xs font-semibold text-slate-400">
+                            Google üzerinden paylaşıldı
+                          </p>
+                        </div>
                       </div>
-                      <span className="rounded-full bg-red-50 px-3 py-1 text-[11px] font-bold text-red-700">
-                        {item.source}
-                      </span>
-                    </div>
-
-                    <p className="google-review-text flex-1 leading-7 text-slate-600">
-                      &quot;{item.text}&quot;
-                    </p>
-
-                    <div className="mt-3 flex items-center justify-between gap-3 border-t border-red-50 pt-3">
-                      <p className="font-black text-red-950">{item.name}</p>
-                      <span className="text-xs font-semibold text-slate-400">
-                        Google
-                      </span>
-                    </div>
-                  </CardContent>
-                </Card>
-              ))}
+                    </CardContent>
+                  </Card>
+                ))}
+              </div>
             </div>
           </div>
 
@@ -728,6 +772,10 @@ export default function Home() {
             overflow: hidden;
           }
 
+          [data-google-reviews-track]::-webkit-scrollbar {
+            display: none;
+          }
+
           @keyframes googleReviewsScroll {
             from {
               transform: translateX(0);
@@ -740,6 +788,10 @@ export default function Home() {
           @media (max-width: 640px) {
             .google-reviews-marquee {
               animation-duration: 48s;
+            }
+
+            .google-review-text {
+              -webkit-line-clamp: 4;
             }
           }
         `}</style>
