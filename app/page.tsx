@@ -193,9 +193,9 @@ const infoTabs: InfoTab[] = [
   {
     id: "online",
     label: "Online Eğitim",
-    title: "Online veya yüz yüze ilerleyin",
+    title: "Online eğitimle ilerleyin",
     description:
-      "Program öğrencinin ihtiyacına göre online ya da yüz yüze planlanabilir.",
+      "Program öğrencinin ihtiyacına göre öğretmen takibiyle yürütülen online hızlı okuma eğitimi olarak planlanır.",
     bullets: [
       "Esnek ders planı",
       "Öğretmen yönlendirmesi",
@@ -228,7 +228,7 @@ const infoTabs: InfoTab[] = [
       "Öğrenciye özel çalışma planı",
       "Okuma hızı ve anlama takibi",
       "Veli bilgilendirmesi",
-      "Online ve yüz yüze seçenekler",
+      "Öğrencinin seviyesine göre online eğitim süreci",
     ],
     icon: CheckCircle2,
   },
@@ -373,7 +373,7 @@ export default function Home() {
           >
             <Badge className="mb-4 rounded-full bg-orange-100 px-4 py-2 text-orange-700 hover:bg-orange-100">
               <Sparkles className="mr-2 h-4 w-4" />
-              Online ve yüz yüze hızlı okuma eğitimi
+              Online hızlı okuma eğitimi
             </Badge>
 
             <h1 className={heroTitleClass}>
@@ -839,7 +839,7 @@ export default function Home() {
             </a>
             <p className="flex items-center gap-2">
               <MapPin className="h-4 w-4 text-red-700" />
-              Online ve yüz yüze hızlı okuma eğitimi
+              Online hızlı okuma eğitimi
             </p>
           </div>
         </div>

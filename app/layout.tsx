@@ -16,9 +16,9 @@ const playfair = Playfair_Display({
 
 export const metadata: Metadata = {
   metadataBase: new URL("https://www.idilegitim.com"),
-  title: "İdil Hızlı Okuma | Online ve Yüz Yüze Hızlı Okuma Eğitimi",
+  title: "İdil Hızlı Okuma | Online Hızlı Okuma Eğitimi",
   description:
-    "İlkokul, ortaokul ve lise öğrencileri için hızlı okuma, okuduğunu anlama, dikkat ve odaklanma becerilerini destekleyen online ve yüz yüze eğitim programı.",
+    "İlkokul, ortaokul ve lise öğrencileri için okuma hızı, okuduğunu anlama, dikkat ve odaklanma becerilerini destekleyen online hızlı okuma eğitimi.",
   keywords: [
     "hızlı okuma",
     "hızlı okuma eğitimi",
@@ -38,9 +38,9 @@ export const metadata: Metadata = {
     canonical: "https://www.idilegitim.com/",
   },
   openGraph: {
-    title: "İdil Hızlı Okuma | Online ve Yüz Yüze Eğitim",
+    title: "İdil Hızlı Okuma | Online Hızlı Okuma Eğitimi",
     description:
-      "Öğrenciler için hızlı okuma, okuduğunu anlama, dikkat ve odaklanma becerilerini destekleyen takipli eğitim programı.",
+      "Öğrenciler için okuma hızı, okuduğunu anlama, dikkat ve odaklanma becerilerini destekleyen takipli online hızlı okuma programı.",
     url: "https://www.idilegitim.com/",
     siteName: "İdil Hızlı Okuma",
     locale: "tr_TR",
@@ -48,9 +48,9 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: "summary_large_image",
-    title: "İdil Hızlı Okuma | Hızlı Okuma Eğitimi",
+    title: "İdil Hızlı Okuma | Online Hızlı Okuma Eğitimi",
     description:
-      "Online ve yüz yüze hızlı okuma eğitimiyle okuma hızı, anlama, dikkat ve odaklanma becerilerini destekleyen program.",
+      "Online hızlı okuma eğitimiyle okuma hızı, anlama, dikkat ve odaklanma becerilerini destekleyen program.",
   },
   robots: {
     index: true,
