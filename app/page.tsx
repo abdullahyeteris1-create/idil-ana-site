@@ -391,20 +391,36 @@ export default function Home() {
               İletişim
             </a>
             <a
-              href={PANEL_URL} target="_blank" rel="noopener noreferrer">
-              
+              href={PANEL_URL}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-flex items-center justify-center rounded-full bg-gradient-to-r from-red-700 to-orange-500 px-5 py-2.5 font-black text-white shadow-lg transition duration-300 hover:-translate-y-0.5 hover:shadow-xl"
+            >
+              <GraduationCap className="mr-2 h-4 w-4" />
               Öğrenci Girişi
             </a>
           </nav>
 
-          <a
-            href={whatsappUrl}
-            aria-label="WhatsApp"
-            className="inline-flex h-10 w-10 items-center justify-center rounded-full bg-emerald-500 text-white shadow-lg transition duration-300 hover:scale-105 hover:bg-emerald-600 lg:h-auto lg:w-auto lg:px-4 lg:py-2 lg:text-sm lg:font-semibold"
-          >
-            <MessageCircle className="h-5 w-5 lg:mr-2 lg:h-4 lg:w-4" />
-            <span className="hidden lg:inline">WhatsApp</span>
-          </a>
+          <div className="flex items-center gap-2">
+            <a
+              href={PANEL_URL}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-flex items-center justify-center rounded-full bg-gradient-to-r from-red-700 to-orange-500 px-4 py-2 text-sm font-black text-white shadow-lg transition duration-300 hover:-translate-y-0.5 hover:shadow-xl lg:hidden"
+            >
+              <GraduationCap className="mr-1.5 h-4 w-4" />
+              Giriş
+            </a>
+
+            <a
+              href={whatsappUrl}
+              aria-label="WhatsApp"
+              className="inline-flex h-10 w-10 items-center justify-center rounded-full bg-emerald-500 text-white shadow-lg transition duration-300 hover:scale-105 hover:bg-emerald-600 lg:h-auto lg:w-auto lg:px-4 lg:py-2 lg:text-sm lg:font-semibold"
+            >
+              <MessageCircle className="h-5 w-5 lg:mr-2 lg:h-4 lg:w-4" />
+              <span className="hidden lg:inline">WhatsApp</span>
+            </a>
+          </div>
         </div>
       </header>
 
@@ -443,6 +459,16 @@ export default function Home() {
               >
                 WhatsApp&apos;tan Bilgi Al
                 <ArrowRight className="ml-2 h-5 w-5" />
+              </a>
+
+              <a
+                href={PANEL_URL}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex items-center justify-center rounded-full border border-red-200 bg-white px-7 py-4 text-base font-bold text-red-700 shadow-sm transition duration-300 hover:-translate-y-0.5 hover:bg-red-50 hover:shadow-lg"
+              >
+                <Monitor className="mr-2 h-5 w-5" />
+                Öğrenci Paneline Gir
               </a>
 
               <a
@@ -923,7 +949,13 @@ export default function Home() {
           </div>
 
           <div className="flex flex-col gap-2 md:items-end">
-            <a href={PANEL_URL} className="font-bold text-red-700">
+            <a
+              href={PANEL_URL}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-flex items-center justify-center rounded-full bg-red-700 px-4 py-2 text-sm font-black text-white shadow-sm transition duration-300 hover:-translate-y-0.5 hover:bg-red-800 hover:shadow-md"
+            >
+              <GraduationCap className="mr-2 h-4 w-4" />
               Öğrenci Girişi
             </a>
             <a href={whatsappUrl} className="font-bold text-red-700">
