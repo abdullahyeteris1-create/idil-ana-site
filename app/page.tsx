@@ -265,6 +265,46 @@ const googleReviews = [
     text: "Kızım her derse severek giriyor. Hızlı okuma dersi sonrası Türkçe dersleri ile devam ediyoruz ve kızım isteyerek katılım sağlıyor.",
     source: "Google yorumu",
   },
+  {
+    name: "Melek Ö.",
+    text: "Okumayı sevmeyen okuma bozuklugu olan ikici sınıf kızım idil hızlı okuma egitimi sayesinde hem.okumayi sevdi hem okuma bozukluğunu düzeltti daha dikkatli ve daha aktif hala geldi derslerde çok eğlendiğini her ders bitiminde anlatıyor teşekkür ederiz.",
+    source: "Google yorumu",
+  },
+  {
+    name: "Seda B.",
+    text: "Çok çok memnun kaldık. İlgili, nazik ve işlerinde çok iyiler. Herkese tavsiye ederim.",
+    source: "Google yorumu",
+  },
+  {
+    name: "Arzu K.",
+    text: "İlkokul 4.sınıfa geçen oğlum için eğitim aldırdık, Abdullah öğretmenimi, oğlumun anlayarak okuduğunu ancak dakikada okuduğu kelime sayısının düşük (89-90 kelime ) kaldığını tespit etti. Bu doğrultuda çalışmalar yaptılar ve ilk kur sonunda oğlumun dakikada anlayarak okuduğu kelime sayısı 147-150 kelime seviyesine çıktı. Biz eğitimden çok memnun kaldık, arkadaşlarıma ve çevremede öneriyorum, neticede anlayarak hızlı okumanın sadece akademik başarı için değil , hayatın her aşamasında önemli olduğunu düşünüyorum . Emeği geçen herkese, başta Abdullah öğretmenimize çok teşekkür ederiz ..",
+    source: "Google yorumu",
+  },
+  {
+    name: "Duygu A.",
+    text: "İdil eğitim kurumu Abdullah öğretmen oğlumun okuyarak anlaması konusunda disiplinli eğitim planıyla yüksek katkı sunmuştur. Ara ara yaptığı raporlamalarla ilerleme durumunu da düzenli paylaşmıştır. Çekinmeden tercih ediniz. Ayrıca kullandığı platform da çok başarılı sekilde günlük egzersiz programları icermektedir..",
+    source: "Google yorumu",
+  },
+  {
+    name: "Mustafa Y.",
+    text: "5. Sınıfa giden oğlum için kurs aldık. Okuma hızı 1 aylik süreçte 130 kelimeden 190 kelimeye ulaşti. Anlama oranında da ciddi artış oldu. Abdullah hocamıza ilgi ve alakasi için teşekkürler..",
+    source: "Google yorumu",
+  },
+  {
+    name: "Ayşegül D.",
+    text: "Güvenilir istediğimiz zaman öğretmenlerimizle iletisim kurabildik kızımın okuma hızi yüzde yüz artti teşekkür ederiz☺😊.",
+    source: "Google yorumu",
+  },
+  {
+    name: "Şebnem A.",
+    text: "Abdullah hocama çok teşekkür ederiz. Iyiki sizinle tanıştık. 1 aylık eğitim sürecimizde bize çok yardımcı oldunuz.Kesinlikle çok iyi bir eğitim kurumu.",
+    source: "Google yorumu",
+  },
+  {
+    name: "Betül S.",
+    text: "İdil Hızlı Okuma Kursuna Abdullah Hocamıza bize kattıkları için çooook teşekkürleer💐💐5.sınıf oğlum ve kuzeni için 1aylık ders aldık çok memnun kaldık…Egzersizlere hala devam ediyoruz herkese tavsiye ediyoruz..",
+    source: "Google yorumu",
+  },
 ];
 
 const faqs = [
