@@ -328,13 +328,13 @@ export default function Home() {
           </a>
 
           <nav className="hidden items-center gap-4 text-sm font-semibold text-slate-700 lg:flex">
-            <a href="#kimler" className="hover:text-red-700">
+            <a href="#egitim-gruplari" className="hover:text-red-700">
               Eğitim Grupları
             </a>
-            <a href="#surec" className="hover:text-red-700">
+            <a href="#egitim-sureci" className="hover:text-red-700">
               Eğitim Süreci
             </a>
-            <a href="#yorumlar" className="hover:text-red-700">
+            <a href="#google-yorumlari" className="hover:text-red-700">
               Google Yorumları
             </a>
             <a href="#sss" className="hover:text-red-700">
@@ -399,7 +399,7 @@ export default function Home() {
               </a>
 
               <a
-                href="#surec"
+                href="#egitim-sureci"
                 className="inline-flex items-center justify-center rounded-full border border-red-200 bg-white px-6 py-3 text-base font-semibold text-red-700 transition duration-300 hover:-translate-y-0.5 hover:bg-red-50 hover:shadow-lg"
               >
                 Eğitim Sürecini Gör
@@ -463,7 +463,7 @@ export default function Home() {
       </section>
 
       <motion.section
-        id="kimler"
+        id="egitim-gruplari"
         className="mx-auto max-w-7xl px-5 py-8"
         {...sectionMotion}
       >
@@ -578,7 +578,7 @@ export default function Home() {
         </motion.div>
       </motion.section>
 
-      <motion.section id="surec" className="bg-white py-8" {...sectionMotion}>
+      <motion.section id="egitim-sureci" className="bg-white py-8" {...sectionMotion}>
         <div className="mx-auto max-w-7xl px-5">
           <div className="mx-auto max-w-3xl text-center">
             <Badge className="rounded-full bg-red-100 px-4 py-2 text-red-700 hover:bg-red-100">
@@ -647,7 +647,7 @@ export default function Home() {
       </motion.section>
 
       <motion.section
-        id="yorumlar"
+        id="google-yorumlari"
         className="bg-[#fff7f5] py-8"
         {...sectionMotion}
       >
