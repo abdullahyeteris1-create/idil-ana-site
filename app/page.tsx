@@ -58,6 +58,22 @@ const sectionMotion = {
 const cardHover =
   "transition duration-300 ease-out hover:-translate-y-1 hover:shadow-xl";
 
+type MetaPixelWindow = Window & {
+  fbq?: (...args: unknown[]) => void;
+};
+
+const trackMetaLead = () => {
+  if (typeof window === "undefined") {
+    return;
+  }
+
+  const fbq = (window as MetaPixelWindow).fbq;
+
+  if (typeof fbq === "function") {
+    fbq("track", "Lead", { content_name: "WhatsApp Bilgi Al" });
+  }
+};
+
 type EducationGroup = {
   id: string;
   title: string;
@@ -415,6 +431,7 @@ export default function Home() {
             <a
               href={whatsappUrl}
               aria-label="WhatsApp"
+              onClick={trackMetaLead}
               className="inline-flex h-10 w-10 items-center justify-center rounded-full bg-emerald-500 text-white shadow-lg transition duration-300 hover:scale-105 hover:bg-emerald-600 lg:h-auto lg:w-auto lg:px-4 lg:py-2 lg:text-sm lg:font-semibold"
             >
               <MessageCircle className="h-5 w-5 lg:mr-2 lg:h-4 lg:w-4" />
@@ -455,6 +472,7 @@ export default function Home() {
             <div className="mt-6 flex flex-col gap-3 sm:flex-row">
               <a
                 href={whatsappUrl}
+                onClick={trackMetaLead}
                 className="inline-flex items-center justify-center rounded-full bg-red-700 px-6 py-3 text-base font-semibold text-white shadow-lg transition duration-300 hover:-translate-y-0.5 hover:bg-red-800 hover:shadow-xl"
               >
                 WhatsApp&apos;tan Bilgi Al
@@ -911,6 +929,7 @@ export default function Home() {
               <div className="mt-6 flex flex-col justify-center gap-3 sm:flex-row">
                 <a
                   href={whatsappUrl}
+                  onClick={trackMetaLead}
                   className="inline-flex items-center justify-center rounded-full bg-white px-6 py-3 text-base font-semibold text-red-700 transition hover:bg-red-50"
                 >
                   <MessageCircle className="mr-2 h-5 w-5" />
@@ -958,7 +977,11 @@ export default function Home() {
               <GraduationCap className="mr-2 h-4 w-4" />
               Öğrenci Girişi
             </a>
-            <a href={whatsappUrl} className="font-bold text-red-700">
+            <a
+              href={whatsappUrl}
+              onClick={trackMetaLead}
+              className="font-bold text-red-700"
+            >
               WhatsApp ile iletişim
             </a>
             <p className="flex items-center gap-2">
@@ -1003,6 +1026,7 @@ export default function Home() {
               href={whatsappUrl}
               target="_blank"
               rel="noopener noreferrer"
+              onClick={trackMetaLead}
               className="inline-flex w-full items-center justify-center rounded-full bg-green-500 px-5 py-3 text-sm font-bold text-white shadow-lg transition hover:-translate-y-0.5 hover:bg-green-600 hover:shadow-xl"
             >
               WhatsApp&apos;ta Sohbeti Başlat
