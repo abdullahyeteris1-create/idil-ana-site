@@ -148,3 +148,42 @@ body {
 .text-balance {
   text-wrap: balance;
 }
+
+.google-reviews-marquee {
+  animation: googleReviewsScroll 38s linear infinite;
+}
+
+.google-reviews-marquee:hover {
+  animation-play-state: paused;
+}
+
+.google-review-text {
+  display: -webkit-box;
+  -webkit-line-clamp: 5;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+[data-google-reviews-track]::-webkit-scrollbar {
+  display: none;
+}
+
+@keyframes googleReviewsScroll {
+  from {
+    transform: translateX(0);
+  }
+
+  to {
+    transform: translateX(-50%);
+  }
+}
+
+@media (max-width: 640px) {
+  .google-reviews-marquee {
+    animation-duration: 48s;
+  }
+
+  .google-review-text {
+    -webkit-line-clamp: 4;
+  }
+}
