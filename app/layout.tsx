@@ -4,6 +4,7 @@ import Script from "next/script";
 import "./globals.css";
 
 const META_PIXEL_ID = "2057696181799169";
+const GOOGLE_ANALYTICS_ID = "G-0RT7SKW0V9";
 
 const manrope = Manrope({
   subsets: ["latin"],
@@ -78,6 +79,19 @@ export default function RootLayout({
       <body
         className={`${manrope.variable} ${playfair.variable} min-h-full bg-white antialiased`}
       >
+        <Script
+          id="google-analytics"
+          src={`https://www.googletagmanager.com/gtag/js?id=${GOOGLE_ANALYTICS_ID}`}
+          strategy="afterInteractive"
+        />
+        <Script id="google-analytics-config" strategy="afterInteractive">
+          {`
+            window.dataLayer = window.dataLayer || [];
+            function gtag(){dataLayer.push(arguments);}
+            gtag('js', new Date());
+            gtag('config', '${GOOGLE_ANALYTICS_ID}');
+          `}
+        </Script>
         <Script id="meta-pixel" strategy="afterInteractive">
           {`
             !function(f,b,e,v,n,t,s)
