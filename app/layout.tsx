@@ -4,7 +4,7 @@ import Script from "next/script";
 import "./globals.css";
 
 const META_PIXEL_ID = "2057696181799169";
-const GOOGLE_ANALYTICS_ID = "G-0RT7SKW0V9";
+const GOOGLE_ANALYTICS_ID = "G-9GVF5KH9CJ";
 
 const manrope = Manrope({
   subsets: ["latin"],
