@@ -3,6 +3,7 @@
 import { useEffect, useRef, useState } from "react";
 import { motion, AnimatePresence, useInView, Variants } from "framer-motion";
 import { MessageCircle, Check } from "lucide-react";
+import { FaInstagram, FaWhatsapp } from "react-icons/fa";
 
 /* =========================================================
    VERİLER
@@ -227,6 +228,7 @@ const rsvpText =
   "Daha hızlı oku daha doğru anla İdil Hızlı Okuma okuma hızını anlama becerisini dikkat ve odaklanmayı birlikte geliştirir her öğrenci kendi seviyesinden başlar";
 const rsvpWords = rsvpText.split(" ");
 
+const INSTAGRAM_URL = "https://www.instagram.com/idilhizliokuma/";
 const WHATSAPP_URL =
   "https://wa.me/905462396786?text=Merhaba,%20h%C4%B1zl%C4%B1%20okuma%20e%C4%9Fitimi%20hakk%C4%B1nda%20bilgi%20almak%20istiyorum.";
 
@@ -403,11 +405,27 @@ export default function Home() {
             <a href="#sss">SSS</a>
           </nav>
           <div className="nav-cta">
-            <a href="https://panel.idilegitim.com" className="btn btn-ghost btn-sm">
-              Öğrenci Girişi
+            <a
+              href={INSTAGRAM_URL}
+              className="header-action header-instagram"
+              target="_blank"
+              rel="noopener noreferrer"
+              aria-label="İdil Eğitim Instagram hesabını aç"
+            >
+              <FaInstagram aria-hidden="true" />
+              <span className="header-action-label">Instagram</span>
             </a>
-            <a href={WHATSAPP_URL} className="header-icon-btn" aria-label="WhatsApp">
-              <MessageCircle size={19} />
+            <a
+              href={WHATSAPP_URL}
+              className="header-action header-whatsapp"
+              aria-label="WhatsApp üzerinden iletişime geç"
+            >
+              <FaWhatsapp aria-hidden="true" />
+              <span className="header-action-label">WhatsApp</span>
+            </a>
+            <a href="https://panel.idilegitim.com" className="btn btn-ghost btn-sm student-login">
+              <span className="student-label-full">Öğrenci Girişi</span>
+              <span className="student-label-short">Giriş</span>
             </a>
           </div>
         </div>
@@ -437,7 +455,18 @@ export default function Home() {
               </Reveal>
               <Reveal className="hero-ctas" delay={0.15}>
                 <a href={WHATSAPP_URL} className="btn btn-primary">
+                  <FaWhatsapp aria-hidden="true" />
                   WhatsApp&apos;tan Bilgi Al
+                </a>
+                <a
+                  href={INSTAGRAM_URL}
+                  className="btn hero-instagram-btn"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  aria-label="İdil Eğitim Instagram hesabını aç"
+                >
+                  <FaInstagram aria-hidden="true" />
+                  Instagram&apos;da Bizi Takip Edin
                 </a>
                 <a href="#surec" className="hero-link">
                   Eğitim sürecini gör →
@@ -773,11 +802,6 @@ export default function Home() {
           </div>
           <div className="foot-bottom">
             <span>© {year} İdil Hızlı Okuma. Tüm hakları saklıdır.</span>
-            <div className="foot-social">
-              <a href="https://www.instagram.com/idilhizliokuma/" aria-label="Instagram">
-                <span className="text-sm font-black">IG</span>
-              </a>
-            </div>
           </div>
         </div>
       </footer>
@@ -943,7 +967,8 @@ export default function Home() {
         .nav-cta {
           display: flex;
           align-items: center;
-          gap: 12px;
+          gap: 8px;
+          flex-shrink: 0;
         }
         .btn {
           display: inline-flex;
@@ -986,20 +1011,58 @@ export default function Home() {
           padding: 9px 16px;
           font-size: 0.8rem;
         }
-        .header-icon-btn {
-          width: 42px;
-          height: 42px;
-          border-radius: 50%;
-          display: flex;
+        .student-login {
+          height: 40px;
+        }
+        .student-label-short {
+          display: none;
+        }
+        .header-action {
+          height: 40px;
+          padding: 0 13px;
+          border-radius: 100px;
+          display: inline-flex;
           align-items: center;
           justify-content: center;
-          background: var(--teal);
+          gap: 7px;
           color: #fff;
-          box-shadow: 0 8px 18px -6px rgba(23, 163, 152, 0.6);
-          transition: transform 0.25s ease;
+          font-size: 0.78rem;
+          font-weight: 800;
+          white-space: nowrap;
+          transition: transform 0.25s ease, box-shadow 0.25s ease, filter 0.25s ease;
         }
-        .header-icon-btn:hover {
-          transform: translateY(-2px) rotate(8deg);
+        .header-action svg {
+          width: 17px;
+          height: 17px;
+          flex-shrink: 0;
+        }
+        .header-instagram,
+        .hero-instagram-btn {
+          background: linear-gradient(135deg, #833ab4 0%, #c13584 38%, #e1306c 62%, #f77737 100%);
+          color: #fff;
+          box-shadow: 0 9px 20px -9px rgba(193, 53, 132, 0.72);
+        }
+        .header-whatsapp {
+          background: #25d366;
+          box-shadow: 0 9px 20px -9px rgba(37, 211, 102, 0.78);
+        }
+        .header-action:hover,
+        .hero-instagram-btn:hover {
+          transform: translateY(-2px);
+          filter: saturate(1.08) brightness(1.04);
+        }
+        .header-action:focus-visible,
+        .student-login:focus-visible,
+        .hero-instagram-btn:focus-visible {
+          outline: 3px solid rgba(23, 163, 152, 0.36);
+          outline-offset: 3px;
+        }
+        .header-instagram:focus-visible,
+        .hero-instagram-btn:focus-visible {
+          outline-color: rgba(193, 53, 132, 0.42);
+        }
+        .hero-instagram-btn {
+          box-shadow: 0 10px 24px -9px rgba(193, 53, 132, 0.64);
         }
 
         .hero {
@@ -1906,26 +1969,11 @@ export default function Home() {
           font-size: 0.8rem;
           color: rgba(251, 247, 240, 0.4);
         }
-        .foot-social {
-          display: flex;
-          gap: 10px;
+        @media (max-width: 1160px) {
+          .nav-links {
+            display: none;
+          }
         }
-        .foot-social a {
-          width: 38px;
-          height: 38px;
-          border-radius: 50%;
-          border: 1px solid var(--line-dark);
-          display: flex;
-          align-items: center;
-          justify-content: center;
-          transition: background 0.3s ease, transform 0.3s ease;
-        }
-        .foot-social a:hover {
-          background: var(--coral);
-          border-color: var(--coral);
-          transform: translateY(-3px);
-        }
-
         @media (max-width: 980px) {
           .hero-grid {
             grid-template-columns: 1fr;
@@ -1965,8 +2013,37 @@ export default function Home() {
           .wrap {
             padding: 0 20px;
           }
-          .nav-links {
+          .brand > span:last-child {
             display: none;
+          }
+          .nav-cta {
+            gap: 6px;
+          }
+          .header-action {
+            width: 38px;
+            height: 38px;
+            padding: 0;
+          }
+          .header-action-label {
+            position: absolute;
+            width: 1px;
+            height: 1px;
+            padding: 0;
+            margin: -1px;
+            overflow: hidden;
+            clip: rect(0, 0, 0, 0);
+            white-space: nowrap;
+            border: 0;
+          }
+          .student-login {
+            height: 38px;
+            padding: 8px 12px;
+          }
+          .student-label-full {
+            display: none;
+          }
+          .student-label-short {
+            display: inline;
           }
           .hero {
             padding: 130px 0 60px;
