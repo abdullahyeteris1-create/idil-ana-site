@@ -76,6 +76,65 @@ const groupData = [
   },
 ];
 
+const packageData = [
+  {
+    name: "1 Aylık Paket",
+    price: "399 TL",
+    features: [
+      "1 aylık platform erişimi",
+      "Hızlı okuma egzersizleri",
+      "Dikkat ve odaklanma çalışmaları",
+      "Okuma ve anlama testleri",
+      "Gelişim takibi",
+    ],
+    message:
+      "Merhaba, 399 TL olan 1 Aylık Online Hızlı Okuma Eğitim Setini satın almak istiyorum.",
+  },
+  {
+    name: "3 Aylık Paket",
+    price: "699 TL",
+    badge: "En Çok Tercih Edilen",
+    featured: true,
+    features: [
+      "3 aylık platform erişimi",
+      "Tüm hızlı okuma egzersizleri",
+      "Dikkat ve konsantrasyon çalışmaları",
+      "Okuma ve anlama testleri",
+      "Düzenli gelişim takibi",
+    ],
+    message:
+      "Merhaba, 699 TL olan 3 Aylık Online Hızlı Okuma Eğitim Setini satın almak istiyorum.",
+  },
+  {
+    name: "6 Aylık Paket",
+    price: "1.299 TL",
+    features: [
+      "6 aylık platform erişimi",
+      "Tüm eğitim ve egzersiz içerikleri",
+      "Seviye bazlı çalışmalar",
+      "Okuma ve anlama testleri",
+      "Uzun dönem gelişim takibi",
+    ],
+    message:
+      "Merhaba, 1.299 TL olan 6 Aylık Online Hızlı Okuma Eğitim Setini satın almak istiyorum.",
+  },
+  {
+    name: "1 Yıllık Paket",
+    price: "1.999 TL",
+    badge: "En Avantajlı",
+    features: [
+      "12 aylık platform erişimi",
+      "Tüm hızlı okuma eğitim içerikleri",
+      "Dikkat, odaklanma ve hafıza çalışmaları",
+      "Okuma ve anlama testleri",
+      "Yıllık gelişim takibi",
+      "Yeni eklenecek egzersizlere erişim",
+    ],
+    message:
+      "Merhaba, 1.999 TL olan 1 Yıllık Online Hızlı Okuma Eğitim Setini satın almak istiyorum.",
+  },
+];
+
 const processData = [
   {
     label: "Eğitim Nedir?",
@@ -338,6 +397,7 @@ export default function Home() {
           </a>
           <nav className="nav-links">
             <a href="#gruplar">Eğitim Grupları</a>
+            <a href="#paketler">Paketler</a>
             <a href="#surec">Eğitim Süreci</a>
             <a href="#yorumlar">Yorumlar</a>
             <a href="#sss">SSS</a>
@@ -488,6 +548,55 @@ export default function Home() {
                 </ul>
               </div>
             </Reveal>
+          </div>
+        </section>
+
+        {/* ---------- PACKAGES ---------- */}
+        <section className="packages" id="paketler">
+          <div className="wrap">
+            <Reveal className="sec-head packages-head">
+              <div className="sec-eyebrow">Eğitim Paketleri</div>
+              <h2 className="display">Size uygun paketi seçin</h2>
+              <p>
+                Tüm paketler tek seferlik ödeme ile sunulur. İhtiyacınıza uygun süreyi seçerek
+                WhatsApp üzerinden satın alma talebinizi iletebilirsiniz.
+              </p>
+            </Reveal>
+
+            <div className="package-grid">
+              {packageData.map((item, index) => (
+                <Reveal
+                  className={`package-card ${item.featured ? "featured" : ""}`}
+                  delay={index * 0.05}
+                  key={item.name}
+                >
+                  {item.badge && <span className="package-badge">{item.badge}</span>}
+                  <div className="package-card-top">
+                    <h3>{item.name}</h3>
+                    <div className="package-price">{item.price}</div>
+                    <div className="package-payment">Tek seferlik ödeme</div>
+                  </div>
+                  <ul className="package-features">
+                    {item.features.map((feature) => (
+                      <li key={feature}>
+                        <span className="feat-check">
+                          <Check size={12} strokeWidth={3} />
+                        </span>
+                        {feature}
+                      </li>
+                    ))}
+                  </ul>
+                  <a
+                    href={`https://wa.me/905462396786?text=${encodeURIComponent(item.message)}`}
+                    className="btn btn-primary package-button"
+                    aria-label={`${item.name} paketini WhatsApp'tan satın al`}
+                  >
+                    <MessageCircle size={18} />
+                    WhatsApp&apos;tan Satın Al
+                  </a>
+                </Reveal>
+              ))}
+            </div>
           </div>
         </section>
 
@@ -1318,6 +1427,115 @@ export default function Home() {
           margin-top: 1px;
         }
 
+        .packages {
+          padding: 110px 0;
+          background: #fff;
+        }
+        .packages-head {
+          margin-left: auto;
+          margin-right: auto;
+          text-align: center;
+        }
+        .packages-head .sec-eyebrow {
+          justify-content: center;
+        }
+        .package-grid {
+          display: grid;
+          grid-template-columns: repeat(4, minmax(0, 1fr));
+          gap: 18px;
+          align-items: stretch;
+        }
+        .package-grid > div {
+          height: 100%;
+        }
+        .package-card {
+          height: 100%;
+          min-height: 560px;
+          position: relative;
+          display: flex;
+          flex-direction: column;
+          padding: 34px 26px 26px;
+          border: 1px solid var(--line);
+          border-radius: 24px;
+          background: var(--cream);
+          box-shadow: 0 18px 45px -32px rgba(18, 20, 43, 0.4);
+          transition: transform 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease;
+        }
+        .package-card:hover {
+          transform: translateY(-6px);
+          border-color: rgba(23, 163, 152, 0.35);
+          box-shadow: 0 24px 50px -28px rgba(18, 20, 43, 0.38);
+        }
+        .package-card.featured {
+          border: 2px solid var(--coral);
+          background: #fff;
+          box-shadow: 0 24px 54px -30px rgba(255, 107, 71, 0.7);
+        }
+        .package-badge {
+          position: absolute;
+          top: 0;
+          left: 50%;
+          transform: translate(-50%, -50%);
+          padding: 7px 14px;
+          border-radius: 100px;
+          background: var(--ink);
+          color: #fff;
+          font-size: 0.7rem;
+          line-height: 1;
+          font-weight: 800;
+          letter-spacing: 0.02em;
+          white-space: nowrap;
+          box-shadow: 0 8px 20px -10px rgba(18, 20, 43, 0.7);
+        }
+        .package-card.featured .package-badge {
+          background: var(--coral);
+        }
+        .package-card-top {
+          padding-bottom: 25px;
+          border-bottom: 1px solid var(--line);
+        }
+        .package-card h3 {
+          font-family: "Fraunces", serif;
+          font-size: 1.35rem;
+          font-weight: 700;
+          margin-bottom: 18px;
+        }
+        .package-price {
+          font-family: "JetBrains Mono", monospace;
+          font-size: clamp(2rem, 3vw, 2.65rem);
+          line-height: 1;
+          font-weight: 800;
+          letter-spacing: -0.05em;
+          color: var(--ink);
+          white-space: nowrap;
+        }
+        .package-payment {
+          margin-top: 9px;
+          color: var(--text-dim);
+          font-size: 0.76rem;
+          font-weight: 600;
+        }
+        .package-features {
+          display: grid;
+          gap: 13px;
+          padding: 25px 0;
+          margin-bottom: auto;
+        }
+        .package-features li {
+          display: flex;
+          align-items: flex-start;
+          gap: 10px;
+          font-size: 0.86rem;
+          line-height: 1.5;
+          font-weight: 600;
+        }
+        .package-button {
+          width: 100%;
+          padding-left: 14px;
+          padding-right: 14px;
+          font-size: 0.82rem;
+        }
+
         .process {
           padding: 110px 0;
         }
@@ -1726,6 +1944,10 @@ export default function Home() {
           .group-detail {
             grid-template-columns: 1fr;
           }
+          .package-grid {
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+            gap: 28px 18px;
+          }
           .process-shell {
             grid-template-columns: 1fr;
             padding: 32px;
@@ -1751,6 +1973,15 @@ export default function Home() {
           }
           .group-cards {
             grid-template-columns: repeat(2, 1fr);
+          }
+          .packages {
+            padding: 80px 0;
+          }
+          .package-grid {
+            grid-template-columns: 1fr;
+          }
+          .package-card {
+            min-height: 0;
           }
           .stats-grid {
             grid-template-columns: 1fr;
