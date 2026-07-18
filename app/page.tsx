@@ -818,7 +818,7 @@ export default function Home() {
         {/* ---------- CONTACT FORM ---------- */}
         <section className="contact-section" id="iletisim-formu">
           <div className="wrap">
-            <Reveal className="contact-card">
+            <div className="contact-card">
               <div className="contact-heading">
                 <span className="contact-icon" aria-hidden="true">
                   <Headphones size={24} />
@@ -988,7 +988,7 @@ export default function Home() {
                   )}
                 </div>
               </form>
-            </Reveal>
+            </div>
           </div>
         </section>
 
