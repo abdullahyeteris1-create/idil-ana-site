@@ -2,12 +2,19 @@
 
 import { useEffect, useRef, useState } from "react";
 import { motion, AnimatePresence, useInView, Variants } from "framer-motion";
-import { MessageCircle, Check } from "lucide-react";
+import { MessageCircle, Check, ShoppingBag } from "lucide-react";
 import { FaInstagram, FaWhatsapp } from "react-icons/fa";
 
 /* =========================================================
    VERİLER
    ========================================================= */
+
+const SHOPIER_URLS = {
+  oneMonth: process.env.NEXT_PUBLIC_SHOPIER_1_MONTH_URL ?? "",
+  threeMonths: process.env.NEXT_PUBLIC_SHOPIER_3_MONTH_URL ?? "",
+  sixMonths: process.env.NEXT_PUBLIC_SHOPIER_6_MONTH_URL ?? "",
+  oneYear: process.env.NEXT_PUBLIC_SHOPIER_1_YEAR_URL ?? "",
+};
 
 const groupData = [
   {
@@ -81,6 +88,7 @@ const packageData = [
   {
     name: "1 Aylık Paket",
     price: "399 TL",
+    shopierUrl: SHOPIER_URLS.oneMonth,
     features: [
       "1 aylık platform erişimi",
       "Hızlı okuma egzersizleri",
@@ -94,6 +102,7 @@ const packageData = [
   {
     name: "3 Aylık Paket",
     price: "699 TL",
+    shopierUrl: SHOPIER_URLS.threeMonths,
     badge: "En Çok Tercih Edilen",
     featured: true,
     features: [
@@ -109,6 +118,7 @@ const packageData = [
   {
     name: "6 Aylık Paket",
     price: "1.299 TL",
+    shopierUrl: SHOPIER_URLS.sixMonths,
     features: [
       "6 aylık platform erişimi",
       "Tüm eğitim ve egzersiz içerikleri",
@@ -122,6 +132,7 @@ const packageData = [
   {
     name: "1 Yıllık Paket",
     price: "1.999 TL",
+    shopierUrl: SHOPIER_URLS.oneYear,
     badge: "En Avantajlı",
     features: [
       "12 aylık platform erişimi",
@@ -231,6 +242,22 @@ const rsvpWords = rsvpText.split(" ");
 const INSTAGRAM_URL = "https://www.instagram.com/idilhizliokuma/";
 const WHATSAPP_URL =
   "https://wa.me/905462396786?text=Merhaba,%20h%C4%B1zl%C4%B1%20okuma%20e%C4%9Fitimi%20hakk%C4%B1nda%20bilgi%20almak%20istiyorum.";
+
+type MetaPixelWindow = Window & {
+  fbq?: (...args: unknown[]) => void;
+};
+
+const trackMetaLead = () => {
+  if (typeof window === "undefined") {
+    return;
+  }
+
+  const fbq = (window as MetaPixelWindow).fbq;
+
+  if (typeof fbq === "function") {
+    fbq("track", "Lead", { content_name: "WhatsApp Bilgi Al" });
+  }
+};
 
 /* =========================================================
    ANİMASYON VARYANTLARI
@@ -418,12 +445,20 @@ export default function Home() {
             <a
               href={WHATSAPP_URL}
               className="header-action header-whatsapp"
+              target="_blank"
+              rel="noopener noreferrer"
+              onClick={trackMetaLead}
               aria-label="WhatsApp üzerinden iletişime geç"
             >
               <FaWhatsapp aria-hidden="true" />
               <span className="header-action-label">WhatsApp</span>
             </a>
-            <a href="https://panel.idilegitim.com" className="btn btn-ghost btn-sm student-login">
+            <a
+              href="https://panel.idilegitim.com"
+              className="btn btn-ghost btn-sm student-login"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
               <span className="student-label-full">Öğrenci Girişi</span>
               <span className="student-label-short">Giriş</span>
             </a>
@@ -454,7 +489,13 @@ export default function Home() {
                 </p>
               </Reveal>
               <Reveal className="hero-ctas" delay={0.15}>
-                <a href={WHATSAPP_URL} className="btn btn-primary">
+                <a
+                  href={WHATSAPP_URL}
+                  className="btn btn-primary"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  onClick={trackMetaLead}
+                >
                   <FaWhatsapp aria-hidden="true" />
                   WhatsApp&apos;tan Bilgi Al
                 </a>
@@ -615,14 +656,42 @@ export default function Home() {
                       </li>
                     ))}
                   </ul>
-                  <a
-                    href={`https://wa.me/905462396786?text=${encodeURIComponent(item.message)}`}
-                    className="btn btn-primary package-button"
-                    aria-label={`${item.name} paketini WhatsApp'tan satın al`}
-                  >
-                    <MessageCircle size={18} />
-                    WhatsApp&apos;tan Satın Al
-                  </a>
+                  <div className="package-actions">
+                    {item.shopierUrl.trim() ? (
+                      <a
+                        href={item.shopierUrl.trim()}
+                        className="btn btn-primary package-button package-buy-button"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        aria-label={`${item.name.replace(/ Paket$/, " Paketi")} Shopier üzerinden satın al`}
+                      >
+                        <ShoppingBag size={18} aria-hidden="true" />
+                        Hemen Satın Al
+                      </a>
+                    ) : (
+                      <button
+                        type="button"
+                        className="btn btn-primary package-button package-buy-button"
+                        disabled
+                        aria-label={`${item.name} satışı yakında`}
+                      >
+                        <ShoppingBag size={18} aria-hidden="true" />
+                        Satış yakında
+                      </button>
+                    )}
+                    <span className="package-payment-note">Shopier üzerinden güvenli ödeme</span>
+                    <a
+                      href={`https://wa.me/905462396786?text=${encodeURIComponent(item.message)}`}
+                      className="btn package-button package-whatsapp-button"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      onClick={trackMetaLead}
+                      aria-label={`${item.name} hakkında WhatsApp'tan bilgi al`}
+                    >
+                      <FaWhatsapp size={18} aria-hidden="true" />
+                      Sorularınız mı Var?
+                    </a>
+                  </div>
                 </Reveal>
               ))}
             </div>
@@ -761,7 +830,13 @@ export default function Home() {
                 belirleyelim.
               </p>
               <div className="cta-ctas">
-                <a href={WHATSAPP_URL} className="btn btn-primary">
+                <a
+                  href={WHATSAPP_URL}
+                  className="btn btn-primary"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  onClick={trackMetaLead}
+                >
                   WhatsApp&apos;tan Yazın
                 </a>
                 <a href="tel:+905462396786" className="btn btn-ghost">
@@ -794,8 +869,21 @@ export default function Home() {
               </div>
               <div className="foot-col">
                 <h4>İletişim</h4>
-                <a href="https://panel.idilegitim.com">Öğrenci Girişi</a>
-                <a href="https://wa.me/905462396786">WhatsApp</a>
+                <a
+                  href="https://panel.idilegitim.com"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  Öğrenci Girişi
+                </a>
+                <a
+                  href="https://wa.me/905462396786"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  onClick={trackMetaLead}
+                >
+                  WhatsApp
+                </a>
                 <a href="tel:+905462396786">+90 546 239 67 86</a>
               </div>
             </div>
@@ -809,6 +897,9 @@ export default function Home() {
       {/* ---------- FLOATING WHATSAPP ---------- */}
       <motion.a
         href={WHATSAPP_URL}
+        target="_blank"
+        rel="noopener noreferrer"
+        onClick={trackMetaLead}
         aria-label="WhatsApp ile iletişim"
         animate={{ y: [0, -8, 0] }}
         whileHover={{ scale: 1.08 }}
@@ -1592,11 +1683,44 @@ export default function Home() {
           line-height: 1.5;
           font-weight: 600;
         }
+        .package-actions {
+          display: flex;
+          flex-direction: column;
+          align-items: stretch;
+          gap: 9px;
+          width: 100%;
+        }
         .package-button {
           width: 100%;
           padding-left: 14px;
           padding-right: 14px;
           font-size: 0.82rem;
+        }
+        .package-payment-note {
+          color: var(--text-dim);
+          font-size: 0.7rem;
+          font-weight: 600;
+          line-height: 1.35;
+          text-align: center;
+        }
+        .package-buy-button:disabled {
+          cursor: not-allowed;
+          opacity: 0.55;
+          transform: none;
+          box-shadow: none;
+        }
+        .package-buy-button:disabled:hover {
+          transform: none;
+          box-shadow: none;
+        }
+        .package-whatsapp-button {
+          background: #25d366;
+          color: #fff;
+          box-shadow: 0 8px 20px -12px rgba(18, 140, 74, 0.55);
+        }
+        .package-whatsapp-button:hover {
+          background: #1ebe5d;
+          transform: translateY(-2px);
         }
 
         .process {
