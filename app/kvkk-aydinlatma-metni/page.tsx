@@ -1,4 +1,6 @@
 import type { Metadata } from "next";
+import Link from "next/link";
+import { createPageMetadata } from "@/lib/seo";
 
 const DATA_CONTROLLER_INFO = {
   legalName: "", // TODO: İşletmenin resmi/yasal unvanını yayın öncesinde ekleyin.
@@ -6,10 +8,12 @@ const DATA_CONTROLLER_INFO = {
   email: "", // TODO: KVKK başvuruları için kullanılacak e-posta adresini ekleyin.
 };
 
-export const metadata: Metadata = {
-  title: "KVKK Aydınlatma Metni | İdil Hızlı Okuma",
-  description: "İletişim formu kapsamında kişisel verilerin işlenmesine ilişkin bilgilendirme.",
-};
+export const metadata: Metadata = createPageMetadata({
+  title: "KVKK Aydınlatma Metni",
+  description:
+    "İdil Eğitim iletişim formunda paylaşılan kişisel verilerin işlenme amaçları, hukuki sebepleri, saklama süresi ve başvuru hakları hakkında bilgi alın.",
+  path: "/kvkk-aydinlatma-metni",
+});
 
 const sections = [
   {
@@ -48,12 +52,12 @@ export default function KvkkAydinlatmaMetniPage() {
   return (
     <main className="min-h-screen bg-[#f2f7fb] px-5 py-16 text-[#12142b] sm:px-8 sm:py-20">
       <article className="mx-auto max-w-3xl rounded-[28px] border border-black/10 bg-white p-7 shadow-[0_24px_70px_-32px_rgba(18,20,43,0.32)] sm:p-12">
-        <a
+        <Link
           href="/"
           className="mb-8 inline-flex text-sm font-bold text-[#0e7a72] transition-colors hover:text-[#e8502a]"
         >
           ← Ana sayfaya dön
-        </a>
+        </Link>
 
         <header className="mb-10 border-b border-black/10 pb-8">
           <p className="mb-3 text-xs font-extrabold uppercase tracking-[0.16em] text-[#0e7a72]">

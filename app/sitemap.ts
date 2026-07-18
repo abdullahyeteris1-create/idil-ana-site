@@ -1,38 +1,27 @@
 import type { MetadataRoute } from "next";
-
-const baseUrl = "https://www.idilegitim.com";
+import { absoluteUrl } from "@/lib/seo";
 
 export default function sitemap(): MetadataRoute.Sitemap {
+  const lastModified = new Date();
+
   return [
     {
-      url: `${baseUrl}/`,
+      url: absoluteUrl("/"),
+      lastModified,
       changeFrequency: "weekly",
       priority: 1,
     },
     {
-      url: `${baseUrl}/#egitim-gruplari`,
-      changeFrequency: "weekly",
-      priority: 0.8,
+      url: absoluteUrl("/hizli-okuma-egitimi"),
+      lastModified,
+      changeFrequency: "monthly",
+      priority: 0.9,
     },
     {
-      url: `${baseUrl}/#egitim-sureci`,
-      changeFrequency: "weekly",
-      priority: 0.8,
-    },
-    {
-      url: `${baseUrl}/#google-yorumlari`,
-      changeFrequency: "weekly",
-      priority: 0.7,
-    },
-    {
-      url: `${baseUrl}/#sss`,
-      changeFrequency: "weekly",
-      priority: 0.7,
-    },
-    {
-      url: `${baseUrl}/#iletisim`,
-      changeFrequency: "weekly",
-      priority: 0.8,
+      url: absoluteUrl("/kvkk-aydinlatma-metni"),
+      lastModified,
+      changeFrequency: "yearly",
+      priority: 0.3,
     },
   ];
 }

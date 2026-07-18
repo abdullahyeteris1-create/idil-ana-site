@@ -1,9 +1,19 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
+import { usePathname } from "next/navigation";
 import { motion, AnimatePresence, useInView, Variants } from "framer-motion";
 import { Check, Headphones, LoaderCircle, MessageCircle, Send, ShoppingBag } from "lucide-react";
 import { FaInstagram, FaWhatsapp } from "react-icons/fa";
+import {
+  DEFAULT_DESCRIPTION,
+  DEFAULT_TITLE,
+  INSTAGRAM_URL,
+  LOGO_PATH,
+  SITE_NAME,
+  SITE_URL,
+  absoluteUrl,
+} from "@/lib/seo";
 
 /* =========================================================
    VERİLER
@@ -271,9 +281,79 @@ const emptyContactForm: ContactFormValues = {
   website: "",
 };
 
-const INSTAGRAM_URL = "https://www.instagram.com/idilhizliokuma/";
 const WHATSAPP_URL =
   "https://wa.me/905462396786?text=Merhaba,%20h%C4%B1zl%C4%B1%20okuma%20e%C4%9Fitimi%20hakk%C4%B1nda%20bilgi%20almak%20istiyorum.";
+
+const packageOffersJsonLd = packageData.map((item) => {
+  const shopierUrl = item.shopierUrl.trim();
+
+  return {
+    "@type": "Offer",
+    name: item.name,
+    price: item.price.replace(/\D/g, ""),
+    priceCurrency: "TRY",
+    url: shopierUrl || absoluteUrl("/#paketler"),
+    ...(shopierUrl ? { availability: "https://schema.org/InStock" } : {}),
+  };
+});
+
+const homeJsonLd = {
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": ["Organization", "EducationalOrganization"],
+      "@id": `${SITE_URL}/#organization`,
+      name: SITE_NAME,
+      url: SITE_URL,
+      logo: absoluteUrl(LOGO_PATH),
+      description: DEFAULT_DESCRIPTION,
+      telephone: "+90 546 239 67 86",
+      sameAs: [INSTAGRAM_URL],
+    },
+    {
+      "@type": "WebSite",
+      "@id": `${SITE_URL}/#website`,
+      url: SITE_URL,
+      name: SITE_NAME,
+      inLanguage: "tr-TR",
+      publisher: { "@id": `${SITE_URL}/#organization` },
+    },
+    {
+      "@type": "WebPage",
+      "@id": `${SITE_URL}/#webpage`,
+      url: SITE_URL,
+      name: DEFAULT_TITLE,
+      description: DEFAULT_DESCRIPTION,
+      isPartOf: { "@id": `${SITE_URL}/#website` },
+      about: { "@id": `${SITE_URL}/#organization` },
+      inLanguage: "tr-TR",
+    },
+    {
+      "@type": "Course",
+      "@id": `${SITE_URL}/#online-hizli-okuma-egitimi`,
+      name: "Online Hızlı Okuma Eğitimi ve Dikkat Geliştirme",
+      description:
+        "Okuma hızını, anlama becerisini ve dikkati birlikte geliştiren takipli online çalışma sistemi.",
+      provider: { "@id": `${SITE_URL}/#organization` },
+      inLanguage: "tr-TR",
+      offers: packageOffersJsonLd,
+    },
+    {
+      "@type": "FAQPage",
+      "@id": `${SITE_URL}/#faq`,
+      mainEntity: faqData.map((item) => ({
+        "@type": "Question",
+        name: item.q,
+        acceptedAnswer: {
+          "@type": "Answer",
+          text: item.a,
+        },
+      })),
+    },
+  ],
+};
+
+const serializedHomeJsonLd = JSON.stringify(homeJsonLd).replace(/</g, "\\u003c");
 
 type TrackingWindow = Window & {
   fbq?: (...args: unknown[]) => void;
@@ -443,6 +523,7 @@ function RsvpDemo() {
    ========================================================= */
 
 export default function Home() {
+  const pathname = usePathname();
   const [scrolled, setScrolled] = useState(false);
   const [activeGroup, setActiveGroup] = useState(0);
   const [activeTab, setActiveTab] = useState(0);
@@ -535,6 +616,13 @@ export default function Home() {
 
   return (
     <>
+      {pathname === "/" && (
+        <script
+          id="home-structured-data"
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: serializedHomeJsonLd }}
+        />
+      )}
       {/* ---------- HEADER ---------- */}
       <header id="siteHeader" className={scrolled ? "scrolled" : ""}>
         <div className="wrap nav">

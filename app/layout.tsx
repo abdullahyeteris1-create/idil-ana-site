@@ -1,6 +1,14 @@
 import type { Metadata } from "next";
 import { Manrope, Playfair_Display } from "next/font/google";
 import Script from "next/script";
+import {
+  DEFAULT_DESCRIPTION,
+  DEFAULT_TITLE,
+  OG_IMAGE_PATH,
+  SEO_KEYWORDS,
+  SITE_NAME,
+  SITE_URL,
+} from "@/lib/seo";
 import "./globals.css";
 
 const META_PIXEL_ID = "2057696181799169";
@@ -19,42 +27,42 @@ const playfair = Playfair_Display({
 });
 
 export const metadata: Metadata = {
-  metadataBase: new URL("https://www.idilegitim.com"),
-  title: "İdil Hızlı Okuma | Online Hızlı Okuma Eğitimi",
-  description:
-    "İlkokul, ortaokul ve lise öğrencileri için okuma hızı, okuduğunu anlama, dikkat ve odaklanma becerilerini destekleyen online hızlı okuma eğitimi.",
-  keywords: [
-    "hızlı okuma",
-    "hızlı okuma eğitimi",
-    "online hızlı okuma",
-    "okuduğunu anlama",
-    "dikkat geliştirme",
-    "odaklanma",
-    "ilkokul hızlı okuma",
-    "ortaokul hızlı okuma",
-    "lise hızlı okuma",
-    "İdil Hızlı Okuma",
-  ],
-  authors: [{ name: "İdil Hızlı Okuma" }],
-  creator: "İdil Hızlı Okuma",
-  publisher: "İdil Hızlı Okuma",
+  metadataBase: new URL(SITE_URL),
+  title: {
+    default: DEFAULT_TITLE,
+    template: `%s | ${SITE_NAME}`,
+  },
+  description: DEFAULT_DESCRIPTION,
+  applicationName: SITE_NAME,
+  keywords: SEO_KEYWORDS,
+  authors: [{ name: SITE_NAME, url: SITE_URL }],
+  creator: SITE_NAME,
+  publisher: SITE_NAME,
+  category: "education",
   alternates: {
-    canonical: "https://www.idilegitim.com/",
+    canonical: SITE_URL,
   },
   openGraph: {
-    title: "İdil Hızlı Okuma | Online Hızlı Okuma Eğitimi",
-    description:
-      "Öğrenciler için okuma hızı, okuduğunu anlama, dikkat ve odaklanma becerilerini destekleyen takipli online hızlı okuma programı.",
-    url: "https://www.idilegitim.com/",
-    siteName: "İdil Hızlı Okuma",
+    title: DEFAULT_TITLE,
+    description: DEFAULT_DESCRIPTION,
+    url: SITE_URL,
+    siteName: SITE_NAME,
     locale: "tr_TR",
     type: "website",
+    images: [
+      {
+        url: OG_IMAGE_PATH,
+        width: 1200,
+        height: 630,
+        alt: "İdil Eğitim online hızlı okuma ve dikkat geliştirme",
+      },
+    ],
   },
   twitter: {
     card: "summary_large_image",
-    title: "İdil Hızlı Okuma | Online Hızlı Okuma Eğitimi",
-    description:
-      "Online hızlı okuma eğitimiyle okuma hızı, anlama, dikkat ve odaklanma becerilerini destekleyen program.",
+    title: DEFAULT_TITLE,
+    description: DEFAULT_DESCRIPTION,
+    images: [OG_IMAGE_PATH],
   },
   robots: {
     index: true,
@@ -67,6 +75,10 @@ export const metadata: Metadata = {
       "max-snippet": -1,
     },
   },
+  icons: {
+    icon: "/favicon.ico",
+    shortcut: "/favicon.ico",
+  },
 };
 
 export default function RootLayout({
@@ -75,7 +87,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="tr" className="h-full antialiased">
+    <html lang="tr-TR" className="h-full antialiased">
       <body
         className={`${manrope.variable} ${playfair.variable} min-h-full bg-white antialiased`}
       >
