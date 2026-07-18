@@ -256,18 +256,18 @@ type ContactFormValues = {
   phone: string;
   email: string;
   studentGrade: string;
-  kvkkAccepted: boolean;
+  consentAccepted: boolean;
   website: string;
 };
 
-type ContactField = "fullName" | "phone" | "email" | "studentGrade" | "kvkkAccepted";
+type ContactField = "fullName" | "phone" | "email" | "studentGrade" | "consentAccepted";
 
 const emptyContactForm: ContactFormValues = {
   fullName: "",
   phone: "",
   email: "",
   studentGrade: "",
-  kvkkAccepted: false,
+  consentAccepted: false,
   website: "",
 };
 
@@ -494,7 +494,9 @@ export default function Home() {
       errors.email = "Geçerli bir e-posta adresi giriniz.";
     }
     if (!contactForm.studentGrade) errors.studentGrade = "Öğrencinin sınıfını seçiniz.";
-    if (!contactForm.kvkkAccepted) errors.kvkkAccepted = "Devam etmek için KVKK onayı gereklidir.";
+    if (!contactForm.consentAccepted) {
+      errors.consentAccepted = "Devam etmek için KVKK onayını vermelisiniz.";
+    }
 
     if (Object.keys(errors).length > 0) {
       setContactErrors(errors);
@@ -510,10 +512,12 @@ export default function Home() {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
-          ...contactForm,
           fullName,
           phone,
           email,
+          studentGrade: contactForm.studentGrade,
+          consentAccepted: contactForm.consentAccepted,
+          website: contactForm.website,
         }),
       });
 
@@ -938,25 +942,36 @@ export default function Home() {
                 <div className="contact-consent">
                   <label>
                     <input
+                      name="consentAccepted"
                       type="checkbox"
-                      checked={contactForm.kvkkAccepted}
-                      onChange={(event) => updateContactField("kvkkAccepted", event.target.checked)}
-                      aria-invalid={Boolean(contactErrors.kvkkAccepted)}
+                      checked={contactForm.consentAccepted}
+                      onChange={(event) => updateContactField("consentAccepted", event.target.checked)}
+                      aria-invalid={Boolean(contactErrors.consentAccepted)}
+                      aria-required="true"
+                      required
                     />
                     <span>
-                      Kişisel verilerimin iletişim talebimin yanıtlanması amacıyla işlenmesini kabul
-                      ediyorum.
+                      <a
+                        href="/kvkk-aydinlatma-metni"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                      >
+                        Kişisel verilerimin
+                      </a>
+                      , tarafımla iletişime geçilmesi amacıyla işlenmesini kabul ediyorum.
                     </span>
                   </label>
-                  {contactErrors.kvkkAccepted && (
-                    <span className="contact-field-error">{contactErrors.kvkkAccepted}</span>
+                  {contactErrors.consentAccepted && (
+                    <span className="contact-field-error">{contactErrors.consentAccepted}</span>
                   )}
                 </div>
 
                 <button
                   type="submit"
-                  className="btn btn-primary contact-submit"
-                  disabled={contactStatus === "submitting"}
+                  className={`btn btn-primary contact-submit ${
+                    contactStatus === "submitting" ? "is-submitting" : ""
+                  }`}
+                  disabled={contactStatus === "submitting" || !contactForm.consentAccepted}
                 >
                   {contactStatus === "submitting" ? (
                     <>
@@ -2138,6 +2153,16 @@ export default function Home() {
           margin-top: 2px;
           accent-color: var(--teal-deep);
         }
+        .contact-consent a {
+          color: var(--teal-deep);
+          font-weight: 700;
+          text-decoration: underline;
+          text-decoration-thickness: 1px;
+          text-underline-offset: 2px;
+        }
+        .contact-consent a:hover {
+          color: var(--coral-deep);
+        }
         .contact-consent .contact-field-error {
           display: block;
           margin: 7px 0 0 28px;
@@ -2148,9 +2173,14 @@ export default function Home() {
           margin: 28px auto 0;
         }
         .contact-submit:disabled {
+          cursor: not-allowed;
+          opacity: 0.46;
+          transform: none;
+          box-shadow: none;
+        }
+        .contact-submit.is-submitting:disabled {
           cursor: wait;
           opacity: 0.72;
-          transform: none;
         }
         .contact-spinner {
           animation: contact-spin 0.8s linear infinite;

@@ -6,7 +6,7 @@ type ContactRequestBody = {
   phone?: unknown;
   email?: unknown;
   studentGrade?: unknown;
-  kvkkAccepted?: unknown;
+  consentAccepted?: unknown;
   website?: unknown;
 };
 
@@ -79,6 +79,8 @@ function createEmailHtml({
     ["E-posta", email || "Belirtilmedi"],
     ["Öğrencinin Sınıfı", studentGrade],
     ["Gönderim Tarihi", submittedAt],
+    ["KVKK Onayı", "Kabul edildi"],
+    ["KVKK Onay Tarihi", submittedAt],
     ...(ip ? [["IP", ip]] : []),
     ...(userAgent ? [["User Agent", userAgent]] : []),
   ];
@@ -118,28 +120,33 @@ export async function POST(request: Request) {
   }
 
   const body = payload as ContactRequestBody;
-  const honeypot = getString(body.website, 200);
-
-  if (honeypot) {
-    return NextResponse.json({ ok: true });
-  }
-
   const fullName = getString(body.fullName, 100);
   const phone = getString(body.phone, 30);
   const email = getString(body.email, 254);
   const studentGrade = getString(body.studentGrade, 30);
+  const honeypot = getString(body.website, 200);
+
+  if (body.consentAccepted !== true) {
+    return NextResponse.json(
+      { ok: false, message: "Devam etmek için KVKK onayını vermelisiniz." },
+      { status: 400 },
+    );
+  }
 
   if (
     fullName.length < 2 ||
     !isValidPhone(phone) ||
     !isValidEmail(email) ||
-    !VALID_GRADES.has(studentGrade) ||
-    body.kvkkAccepted !== true
+    !VALID_GRADES.has(studentGrade)
   ) {
     return NextResponse.json(
       { ok: false, message: "Lütfen form alanlarını kontrol ediniz." },
       { status: 400 },
     );
+  }
+
+  if (honeypot) {
+    return NextResponse.json({ ok: true });
   }
 
   const apiKey = process.env.RESEND_API_KEY?.trim();
