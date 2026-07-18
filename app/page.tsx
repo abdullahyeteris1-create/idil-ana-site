@@ -2,7 +2,7 @@
 
 import { useEffect, useRef, useState } from "react";
 import { motion, AnimatePresence, useInView, Variants } from "framer-motion";
-import { MessageCircle, Check, ShoppingBag } from "lucide-react";
+import { Check, Headphones, LoaderCircle, MessageCircle, Send, ShoppingBag } from "lucide-react";
 import { FaInstagram, FaWhatsapp } from "react-icons/fa";
 
 /* =========================================================
@@ -239,12 +239,45 @@ const rsvpText =
   "Daha hızlı oku daha doğru anla İdil Hızlı Okuma okuma hızını anlama becerisini dikkat ve odaklanmayı birlikte geliştirir her öğrenci kendi seviyesinden başlar";
 const rsvpWords = rsvpText.split(" ");
 
+const gradeOptions = [
+  "1. Sınıf",
+  "2. Sınıf",
+  "3. Sınıf",
+  "4. Sınıf",
+  "5. Sınıf",
+  "6. Sınıf",
+  "7. Sınıf",
+  "8. Sınıf",
+  "Diğer",
+];
+
+type ContactFormValues = {
+  fullName: string;
+  phone: string;
+  email: string;
+  studentGrade: string;
+  kvkkAccepted: boolean;
+  website: string;
+};
+
+type ContactField = "fullName" | "phone" | "email" | "studentGrade" | "kvkkAccepted";
+
+const emptyContactForm: ContactFormValues = {
+  fullName: "",
+  phone: "",
+  email: "",
+  studentGrade: "",
+  kvkkAccepted: false,
+  website: "",
+};
+
 const INSTAGRAM_URL = "https://www.instagram.com/idilhizliokuma/";
 const WHATSAPP_URL =
   "https://wa.me/905462396786?text=Merhaba,%20h%C4%B1zl%C4%B1%20okuma%20e%C4%9Fitimi%20hakk%C4%B1nda%20bilgi%20almak%20istiyorum.";
 
-type MetaPixelWindow = Window & {
+type TrackingWindow = Window & {
   fbq?: (...args: unknown[]) => void;
+  gtag?: (...args: unknown[]) => void;
 };
 
 const trackMetaLead = () => {
@@ -252,11 +285,24 @@ const trackMetaLead = () => {
     return;
   }
 
-  const fbq = (window as MetaPixelWindow).fbq;
+  const fbq = (window as TrackingWindow).fbq;
 
   if (typeof fbq === "function") {
     fbq("track", "Lead", { content_name: "WhatsApp Bilgi Al" });
   }
+};
+
+const trackContactFormSuccess = () => {
+  if (typeof window === "undefined") {
+    return;
+  }
+
+  const gtag = (window as TrackingWindow).gtag;
+  if (typeof gtag === "function") {
+    gtag("event", "generate_lead", { form_name: "contact_form" });
+  }
+
+  trackMetaLead();
 };
 
 /* =========================================================
@@ -401,6 +447,11 @@ export default function Home() {
   const [activeGroup, setActiveGroup] = useState(0);
   const [activeTab, setActiveTab] = useState(0);
   const [openFaq, setOpenFaq] = useState<number | null>(0);
+  const [contactForm, setContactForm] = useState<ContactFormValues>(emptyContactForm);
+  const [contactErrors, setContactErrors] = useState<Partial<Record<ContactField, string>>>({});
+  const [contactStatus, setContactStatus] = useState<"idle" | "submitting" | "success" | "error">(
+    "idle",
+  );
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 30);
@@ -411,6 +462,72 @@ export default function Home() {
   const group = groupData[activeGroup];
   const panel = processData[activeTab];
   const year = new Date().getFullYear();
+
+  const updateContactField = <Field extends keyof ContactFormValues>(
+    field: Field,
+    value: ContactFormValues[Field],
+  ) => {
+    setContactForm((current) => ({ ...current, [field]: value }));
+    if (field !== "website") {
+      setContactErrors((current) => ({ ...current, [field]: undefined }));
+    }
+    if (contactStatus === "success" || contactStatus === "error") {
+      setContactStatus("idle");
+    }
+  };
+
+  const handleContactSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+    if (contactStatus === "submitting") return;
+
+    const errors: Partial<Record<ContactField, string>> = {};
+    const fullName = contactForm.fullName.trim();
+    const phone = contactForm.phone.trim();
+    const email = contactForm.email.trim();
+    const phoneDigits = phone.replace(/\D/g, "");
+
+    if (fullName.length < 2) errors.fullName = "Ad Soyad alanı zorunludur.";
+    if (!/^[+\d\s().-]+$/.test(phone) || phoneDigits.length < 10 || phoneDigits.length > 12) {
+      errors.phone = "Geçerli bir telefon numarası giriniz.";
+    }
+    if (email && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+      errors.email = "Geçerli bir e-posta adresi giriniz.";
+    }
+    if (!contactForm.studentGrade) errors.studentGrade = "Öğrencinin sınıfını seçiniz.";
+    if (!contactForm.kvkkAccepted) errors.kvkkAccepted = "Devam etmek için KVKK onayı gereklidir.";
+
+    if (Object.keys(errors).length > 0) {
+      setContactErrors(errors);
+      setContactStatus("idle");
+      return;
+    }
+
+    setContactErrors({});
+    setContactStatus("submitting");
+
+    try {
+      const response = await fetch("/api/contact", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          ...contactForm,
+          fullName,
+          phone,
+          email,
+        }),
+      });
+
+      if (!response.ok) {
+        throw new Error("Contact form request failed");
+      }
+
+      setContactForm(emptyContactForm);
+      setContactStatus("success");
+      trackContactFormSuccess();
+    } catch {
+      setContactStatus("error");
+    }
+  };
 
   return (
     <>
@@ -695,6 +812,183 @@ export default function Home() {
                 </Reveal>
               ))}
             </div>
+          </div>
+        </section>
+
+        {/* ---------- CONTACT FORM ---------- */}
+        <section className="contact-section" id="iletisim-formu">
+          <div className="wrap">
+            <Reveal className="contact-card">
+              <div className="contact-heading">
+                <span className="contact-icon" aria-hidden="true">
+                  <Headphones size={24} />
+                </span>
+                <h2 className="display">Size Ulaşalım</h2>
+                <p>
+                  Hızlı okuma eğitimi hakkında bilgi almak için bilgilerinizi bırakın.
+                  <br />
+                  En kısa sürede sizi arayalım.
+                </p>
+              </div>
+
+              <form className="contact-form" onSubmit={handleContactSubmit} noValidate>
+                <div className="contact-form-grid">
+                  <div className="contact-field">
+                    <label htmlFor="contact-full-name">Ad Soyad</label>
+                    <input
+                      id="contact-full-name"
+                      name="fullName"
+                      type="text"
+                      autoComplete="name"
+                      value={contactForm.fullName}
+                      onChange={(event) => updateContactField("fullName", event.target.value)}
+                      aria-invalid={Boolean(contactErrors.fullName)}
+                      aria-describedby={contactErrors.fullName ? "contact-full-name-error" : undefined}
+                      required
+                    />
+                    {contactErrors.fullName && (
+                      <span className="contact-field-error" id="contact-full-name-error">
+                        {contactErrors.fullName}
+                      </span>
+                    )}
+                  </div>
+
+                  <div className="contact-field">
+                    <label htmlFor="contact-phone">Telefon Numarası</label>
+                    <input
+                      id="contact-phone"
+                      name="phone"
+                      type="tel"
+                      inputMode="tel"
+                      autoComplete="tel"
+                      placeholder="05xx xxx xx xx"
+                      value={contactForm.phone}
+                      onChange={(event) => updateContactField("phone", event.target.value)}
+                      aria-invalid={Boolean(contactErrors.phone)}
+                      aria-describedby={contactErrors.phone ? "contact-phone-error" : undefined}
+                      required
+                    />
+                    {contactErrors.phone && (
+                      <span className="contact-field-error" id="contact-phone-error">
+                        {contactErrors.phone}
+                      </span>
+                    )}
+                  </div>
+
+                  <div className="contact-field">
+                    <label htmlFor="contact-email">
+                      E-posta <span>(isteğe bağlı)</span>
+                    </label>
+                    <input
+                      id="contact-email"
+                      name="email"
+                      type="email"
+                      autoComplete="email"
+                      value={contactForm.email}
+                      onChange={(event) => updateContactField("email", event.target.value)}
+                      aria-invalid={Boolean(contactErrors.email)}
+                      aria-describedby={contactErrors.email ? "contact-email-error" : undefined}
+                    />
+                    {contactErrors.email && (
+                      <span className="contact-field-error" id="contact-email-error">
+                        {contactErrors.email}
+                      </span>
+                    )}
+                  </div>
+
+                  <div className="contact-field">
+                    <label htmlFor="contact-grade">Öğrencinin Sınıfı</label>
+                    <select
+                      id="contact-grade"
+                      name="studentGrade"
+                      value={contactForm.studentGrade}
+                      onChange={(event) => updateContactField("studentGrade", event.target.value)}
+                      aria-invalid={Boolean(contactErrors.studentGrade)}
+                      aria-describedby={contactErrors.studentGrade ? "contact-grade-error" : undefined}
+                      required
+                    >
+                      <option value="">Seçiniz</option>
+                      {gradeOptions.map((grade) => (
+                        <option value={grade} key={grade}>
+                          {grade}
+                        </option>
+                      ))}
+                    </select>
+                    {contactErrors.studentGrade && (
+                      <span className="contact-field-error" id="contact-grade-error">
+                        {contactErrors.studentGrade}
+                      </span>
+                    )}
+                  </div>
+                </div>
+
+                <div className="contact-honeypot" aria-hidden="true">
+                  <label htmlFor="contact-website">Web sitesi</label>
+                  <input
+                    id="contact-website"
+                    name="website"
+                    type="text"
+                    tabIndex={-1}
+                    autoComplete="off"
+                    value={contactForm.website}
+                    onChange={(event) => updateContactField("website", event.target.value)}
+                  />
+                </div>
+
+                <div className="contact-consent">
+                  <label>
+                    <input
+                      type="checkbox"
+                      checked={contactForm.kvkkAccepted}
+                      onChange={(event) => updateContactField("kvkkAccepted", event.target.checked)}
+                      aria-invalid={Boolean(contactErrors.kvkkAccepted)}
+                    />
+                    <span>
+                      Kişisel verilerimin iletişim talebimin yanıtlanması amacıyla işlenmesini kabul
+                      ediyorum.
+                    </span>
+                  </label>
+                  {contactErrors.kvkkAccepted && (
+                    <span className="contact-field-error">{contactErrors.kvkkAccepted}</span>
+                  )}
+                </div>
+
+                <button
+                  type="submit"
+                  className="btn btn-primary contact-submit"
+                  disabled={contactStatus === "submitting"}
+                >
+                  {contactStatus === "submitting" ? (
+                    <>
+                      <LoaderCircle className="contact-spinner" size={18} aria-hidden="true" />
+                      Gönderiliyor...
+                    </>
+                  ) : (
+                    <>
+                      <Send size={18} aria-hidden="true" />
+                      Bilgilerimi Gönder
+                    </>
+                  )}
+                </button>
+
+                <div className="contact-status" aria-live="polite">
+                  {contactStatus === "success" && (
+                    <p className="contact-success" role="status">
+                      Bilgileriniz başarıyla gönderildi.
+                      <br />
+                      En kısa sürede sizinle iletişime geçeceğiz.
+                    </p>
+                  )}
+                  {contactStatus === "error" && (
+                    <p className="contact-error" role="alert">
+                      Gönderim sırasında bir sorun oluştu.
+                      <br />
+                      Lütfen tekrar deneyiniz.
+                    </p>
+                  )}
+                </div>
+              </form>
+            </Reveal>
           </div>
         </section>
 
@@ -1723,6 +2017,173 @@ export default function Home() {
           transform: translateY(-2px);
         }
 
+        .contact-section {
+          padding: 100px 0;
+          background: #f2f7fb;
+        }
+        .contact-card {
+          width: min(100%, 880px);
+          margin: 0 auto;
+          padding: 52px;
+          border: 1px solid rgba(18, 20, 43, 0.08);
+          border-radius: 28px;
+          background: #fff;
+          box-shadow: 0 24px 70px -32px rgba(18, 20, 43, 0.32);
+        }
+        .contact-heading {
+          max-width: 650px;
+          margin: 0 auto 36px;
+          text-align: center;
+        }
+        .contact-icon {
+          display: inline-flex;
+          width: 52px;
+          height: 52px;
+          align-items: center;
+          justify-content: center;
+          margin-bottom: 16px;
+          border-radius: 16px;
+          background: rgba(23, 163, 152, 0.13);
+          color: var(--teal-deep);
+          box-shadow: 0 12px 24px -18px rgba(14, 122, 114, 0.8);
+        }
+        .contact-heading h2 {
+          margin-bottom: 12px;
+          font-size: clamp(2rem, 4vw, 3rem);
+        }
+        .contact-heading p {
+          color: var(--text-dim);
+          font-size: 0.98rem;
+          line-height: 1.7;
+        }
+        .contact-form {
+          position: relative;
+        }
+        .contact-form-grid {
+          display: grid;
+          grid-template-columns: repeat(2, minmax(0, 1fr));
+          gap: 22px;
+        }
+        .contact-field {
+          display: flex;
+          min-width: 0;
+          flex-direction: column;
+          gap: 8px;
+        }
+        .contact-field label {
+          font-size: 0.84rem;
+          font-weight: 700;
+        }
+        .contact-field label span {
+          color: var(--text-dim);
+          font-size: 0.74rem;
+          font-weight: 500;
+        }
+        .contact-field input,
+        .contact-field select {
+          width: 100%;
+          height: 50px;
+          padding: 0 15px;
+          border: 1.5px solid rgba(18, 20, 43, 0.15);
+          border-radius: 13px;
+          outline: none;
+          background: #fff;
+          color: var(--ink);
+          font: inherit;
+          font-size: 0.92rem;
+          transition: border-color 0.2s ease, box-shadow 0.2s ease, transform 0.2s ease;
+        }
+        .contact-field input:hover,
+        .contact-field select:hover {
+          border-color: rgba(18, 20, 43, 0.3);
+        }
+        .contact-field input:focus,
+        .contact-field select:focus {
+          border-color: #2563eb;
+          box-shadow: 0 0 0 4px rgba(37, 99, 235, 0.13);
+        }
+        .contact-field input[aria-invalid="true"],
+        .contact-field select[aria-invalid="true"] {
+          border-color: #dc2626;
+        }
+        .contact-field-error {
+          color: #b91c1c;
+          font-size: 0.76rem;
+          font-weight: 600;
+          line-height: 1.4;
+        }
+        .contact-honeypot {
+          position: absolute;
+          left: -10000px;
+          width: 1px;
+          height: 1px;
+          overflow: hidden;
+        }
+        .contact-consent {
+          margin-top: 22px;
+        }
+        .contact-consent label {
+          display: flex;
+          align-items: flex-start;
+          gap: 10px;
+          color: var(--text-dim);
+          cursor: pointer;
+          font-size: 0.8rem;
+          line-height: 1.55;
+        }
+        .contact-consent input {
+          width: 18px;
+          height: 18px;
+          flex: 0 0 auto;
+          margin-top: 2px;
+          accent-color: var(--teal-deep);
+        }
+        .contact-consent .contact-field-error {
+          display: block;
+          margin: 7px 0 0 28px;
+        }
+        .contact-submit {
+          width: min(100%, 320px);
+          min-height: 50px;
+          margin: 28px auto 0;
+        }
+        .contact-submit:disabled {
+          cursor: wait;
+          opacity: 0.72;
+          transform: none;
+        }
+        .contact-spinner {
+          animation: contact-spin 0.8s linear infinite;
+        }
+        @keyframes contact-spin {
+          to {
+            transform: rotate(360deg);
+          }
+        }
+        .contact-status {
+          min-height: 0;
+          margin-top: 18px;
+          text-align: center;
+        }
+        .contact-success,
+        .contact-error {
+          padding: 13px 16px;
+          border-radius: 12px;
+          font-size: 0.84rem;
+          font-weight: 700;
+          line-height: 1.5;
+        }
+        .contact-success {
+          border: 1px solid rgba(22, 163, 74, 0.25);
+          background: #ecfdf3;
+          color: #166534;
+        }
+        .contact-error {
+          border: 1px solid rgba(220, 38, 38, 0.22);
+          background: #fef2f2;
+          color: #b91c1c;
+        }
+
         .process {
           padding: 110px 0;
         }
@@ -2183,6 +2644,23 @@ export default function Home() {
           }
           .package-card {
             min-height: 0;
+          }
+          .contact-section {
+            padding: 72px 0;
+          }
+          .contact-card {
+            padding: 36px 20px;
+            border-radius: 22px;
+          }
+          .contact-heading {
+            margin-bottom: 28px;
+          }
+          .contact-form-grid {
+            grid-template-columns: 1fr;
+            gap: 18px;
+          }
+          .contact-submit {
+            width: 100%;
           }
           .stats-grid {
             grid-template-columns: 1fr;
