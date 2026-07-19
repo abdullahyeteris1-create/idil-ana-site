@@ -102,6 +102,7 @@ export default function RootLayout({
             function gtag(){dataLayer.push(arguments);}
             gtag('js', new Date());
             gtag('config', '${GOOGLE_ANALYTICS_ID}');
+            gtag('config', 'AW-18332625430');
           `}
         </Script>
         <Script id="meta-pixel" strategy="afterInteractive">

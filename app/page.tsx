@@ -355,6 +355,9 @@ const homeJsonLd = {
 
 const serializedHomeJsonLd = JSON.stringify(homeJsonLd).replace(/</g, "\\u003c");
 
+const GOOGLE_ADS_WHATSAPP_CONVERSION_ID =
+  "AW-18332625430/QHarCN2ro9McEJbU1qVE";
+
 type TrackingWindow = Window & {
   fbq?: (...args: unknown[]) => void;
   gtag?: (...args: unknown[]) => void;
@@ -370,6 +373,20 @@ const trackMetaLead = () => {
   if (typeof fbq === "function") {
     fbq("track", "Lead", { content_name: "WhatsApp Bilgi Al" });
   }
+};
+
+const trackWhatsAppClick = () => {
+  if (typeof window !== "undefined") {
+    const gtag = (window as TrackingWindow).gtag;
+
+    if (typeof gtag === "function") {
+      gtag("event", "conversion", {
+        send_to: GOOGLE_ADS_WHATSAPP_CONVERSION_ID,
+      });
+    }
+  }
+
+  trackMetaLead();
 };
 
 const trackContactFormSuccess = () => {
@@ -656,7 +673,7 @@ export default function Home() {
               className="header-action header-whatsapp"
               target="_blank"
               rel="noopener noreferrer"
-              onClick={trackMetaLead}
+              onClick={trackWhatsAppClick}
               aria-label="WhatsApp üzerinden iletişime geç"
             >
               <FaWhatsapp aria-hidden="true" />
@@ -703,7 +720,7 @@ export default function Home() {
                   className="btn btn-primary"
                   target="_blank"
                   rel="noopener noreferrer"
-                  onClick={trackMetaLead}
+                  onClick={trackWhatsAppClick}
                 >
                   <FaWhatsapp aria-hidden="true" />
                   WhatsApp&apos;tan Bilgi Al
@@ -894,7 +911,7 @@ export default function Home() {
                       className="btn package-button package-whatsapp-button"
                       target="_blank"
                       rel="noopener noreferrer"
-                      onClick={trackMetaLead}
+                      onClick={trackWhatsAppClick}
                       aria-label={`${item.name} hakkında WhatsApp'tan bilgi al`}
                     >
                       <FaWhatsapp size={18} aria-hidden="true" />
@@ -1232,7 +1249,7 @@ export default function Home() {
                   className="btn btn-primary"
                   target="_blank"
                   rel="noopener noreferrer"
-                  onClick={trackMetaLead}
+                  onClick={trackWhatsAppClick}
                 >
                   WhatsApp&apos;tan Yazın
                 </a>
@@ -1277,7 +1294,7 @@ export default function Home() {
                   href="https://wa.me/905462396786"
                   target="_blank"
                   rel="noopener noreferrer"
-                  onClick={trackMetaLead}
+                  onClick={trackWhatsAppClick}
                 >
                   WhatsApp
                 </a>
@@ -1296,7 +1313,7 @@ export default function Home() {
         href={WHATSAPP_URL}
         target="_blank"
         rel="noopener noreferrer"
-        onClick={trackMetaLead}
+        onClick={trackWhatsAppClick}
         aria-label="WhatsApp ile iletişim"
         animate={{ y: [0, -8, 0] }}
         whileHover={{ scale: 1.08 }}
