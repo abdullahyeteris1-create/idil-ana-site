@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
+import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { motion, AnimatePresence, useInView, Variants } from "framer-motion";
@@ -840,7 +841,12 @@ export default function Home() {
                   className={`group-card ${activeGroup === i ? "active" : ""}`}
                   onClick={() => setActiveGroup(i)}
                 >
-                  <img src={g.img} alt={g.title} />
+                  <Image
+                    src={g.img}
+                    alt={g.title}
+                    fill
+                    sizes="(max-width: 640px) 45vw, (max-width: 980px) 30vw, 212px"
+                  />
                   <div className="group-card-overlay">
                     <span className="num">{g.num}</span>
                     <h3>{g.title.split(" ").slice(0, 2).join(" ")}</h3>
@@ -852,7 +858,12 @@ export default function Home() {
 
             <Reveal className="group-detail">
               <div className="group-detail-img">
-                <img src={group.img} alt={group.title} />
+                <Image
+                  src={group.img}
+                  alt={group.title}
+                  fill
+                  sizes="(max-width: 640px) calc(100vw - 40px), (max-width: 980px) calc(100vw - 64px), 536px"
+                />
               </div>
               <div>
                 <h3 className="display">{group.title}</h3>
@@ -1989,6 +2000,7 @@ export default function Home() {
           box-shadow: 0 20px 50px -30px rgba(18, 20, 43, 0.3);
         }
         .group-detail-img {
+          position: relative;
           border-radius: 18px;
           overflow: hidden;
           aspect-ratio: 4/3;
