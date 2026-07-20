@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
+import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { motion, AnimatePresence, useInView, Variants } from "framer-motion";
 import { Check, Headphones, LoaderCircle, MessageCircle, Send, ShoppingBag } from "lucide-react";
@@ -1314,6 +1315,7 @@ export default function Home() {
                 <a href="#surec">Eğitim Süreci</a>
                 <a href="#yorumlar">Google Yorumları</a>
                 <a href="#sss">SSS</a>
+                <Link href="/blog">Blog</Link>
               </div>
               <div className="foot-col">
                 <h4>İletişim</h4>
