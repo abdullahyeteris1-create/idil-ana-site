@@ -228,20 +228,44 @@ const reviews = [
 
 const faqData = [
   {
-    q: "Hızlı okuma eğitimi kimler için uygundur?",
-    a: "İlkokul, ortaokul ve lise öğrencileri için uygundur. Program her öğrencinin mevcut okuma hızı ve seviyesine göre kişiselleştirilir.",
+    q: "Online hızlı okuma eğitimi kimler için uygundur?",
+    a: "İdil Eğitim online hızlı okuma programı, ilkokul ve ortaokul öğrencileri için hazırlanmıştır. Çalışmalar öğrencinin yaşına, sınıf seviyesine ve okuma ihtiyaçlarına göre uygulanabilir.",
   },
   {
-    q: "Online eğitim verimli olur mu?",
-    a: "Evet. Dersler birebir ve takipli yürütüldüğü için öğrenci öğretmenle sürekli etkileşim halindedir; egzersizler ve raporlarla ilerleme düzenli takip edilir.",
+    q: "Eğitim tamamen online mı yapılıyor?",
+    a: "Evet. Eğitimler ve hızlı okuma çalışmaları tamamen online olarak gerçekleştirilir. Öğrenciler internet bağlantısı bulunan bilgisayar, tablet veya telefon üzerinden sisteme erişebilir.",
   },
   {
-    q: "Eğitim kaç hafta sürer?",
-    a: "Süre öğrencinin başlangıç seviyesine ve hedeflerine göre değişir. Net bir plan için WhatsApp üzerinden bilgi alabilirsiniz.",
+    q: "Eğitimlerde hangi beceriler geliştiriliyor?",
+    a: "Programda hızlı okuma, okuduğunu anlama, dikkat, odaklanma, konsantrasyon, göz kaslarını geliştirme ve düzenli okuma alışkanlığına yönelik çalışmalar yer alır.",
   },
   {
-    q: "Öğrenci paneli nasıl kullanılır?",
-    a: "Kayıt sonrası öğrenciye özel bir panel tanımlanır. Öğrenci günlük egzersizlerini bu panelden takip eder, veli de ilerleme raporlarına aynı yerden ulaşır.",
+    q: "Eğitim paketleri arasındaki fark nedir?",
+    a: "Paketler kullanım süresine göre değişir. 1 aylık, 3 aylık, 6 aylık ve 1 yıllık seçenekler bulunur. Uzun süreli paketler öğrencinin gelişimini daha düzenli ve uzun vadeli takip etmek isteyen aileler için uygundur.",
+  },
+  {
+    q: "Öğrenci çalışmaları telefon veya tabletten yapabilir mi?",
+    a: "Evet. Platform bilgisayar, tablet ve telefonla uyumlu olacak şekilde hazırlanmıştır. En rahat kullanım için güncel bir internet tarayıcısı ve düzenli internet bağlantısı önerilir.",
+  },
+  {
+    q: "Yapay zekâ destekli eğitim ne anlama geliyor?",
+    a: "Yapay zekâ desteği, öğrencinin çalışma sonuçlarını, başarı oranlarını ve gelişim sürecini değerlendirmeye yardımcı olan kişiselleştirilmiş eğitim özelliklerini ifade eder.",
+  },
+  {
+    q: "Öğrencinin gelişimi takip edilebilir mi?",
+    a: "Evet. Öğrencinin yaptığı çalışmalar, doğru ve yanlış sayıları, başarı oranı, çalışma süresi ve gelişim sonuçları sistem üzerinden takip edilebilir.",
+  },
+  {
+    q: "Eğitim paketi satın alındıktan sonra ne olur?",
+    a: "Satın alma işlemi tamamlandıktan sonra kayıt ve erişim süreciyle ilgili bilgilendirme yapılır. Gerekli giriş bilgileri öğrenci veya veliye iletilir.",
+  },
+  {
+    q: "Eğitim hakkında bilgi almak için nasıl iletişim kurabilirim?",
+    a: "Ana sayfadaki iletişim formunu doldurabilir veya WhatsApp butonunu kullanarak doğrudan bilgi alabilirsiniz.",
+  },
+  {
+    q: "Hızlı okuma eğitimi okuduğunu anlamayı azaltır mı?",
+    a: "Doğru tekniklerle yapılan hızlı okuma çalışmaları yalnızca okuma hızına değil, okuduğunu anlama, dikkat ve odaklanma becerilerine de yöneliktir. Amaç öğrencinin hem daha verimli hem de anlayarak okumasını desteklemektir.",
   },
 ];
 
@@ -544,7 +568,7 @@ export default function Home() {
   const [scrolled, setScrolled] = useState(false);
   const [activeGroup, setActiveGroup] = useState(0);
   const [activeTab, setActiveTab] = useState(0);
-  const [openFaq, setOpenFaq] = useState<number | null>(0);
+  const [openFaq, setOpenFaq] = useState<number | null>(null);
   const [contactForm, setContactForm] = useState<ContactFormValues>(emptyContactForm);
   const [contactErrors, setContactErrors] = useState<Partial<Record<ContactField, string>>>({});
   const [contactStatus, setContactStatus] = useState<"idle" | "submitting" | "success" | "error">(
@@ -924,6 +948,115 @@ export default function Home() {
           </div>
         </section>
 
+        {/* ---------- PROCESS ---------- */}
+        <section className="process" id="surec">
+          <div className="wrap">
+            <Reveal className="sec-head">
+              <div className="sec-eyebrow">Eğitim Süreci</div>
+              <h2 className="display">Eğitim sürecini kısaca tanıyın</h2>
+            </Reveal>
+            <Reveal className="process-shell">
+              <div className="process-tabs">
+                {processData.map((p, i) => (
+                  <button
+                    key={p.label}
+                    className={`p-tab ${activeTab === i ? "active" : ""}`}
+                    onClick={() => setActiveTab(i)}
+                  >
+                    <span className="tnum mono">{String(i + 1).padStart(2, "0")}</span>
+                    {p.label}
+                  </button>
+                ))}
+              </div>
+              <AnimatePresence mode="wait">
+                <motion.div
+                  key={activeTab}
+                  initial={{ opacity: 0, y: 14 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.5, ease: "easeOut" }}
+                >
+                  <h3 className="display">{panel.title}</h3>
+                  <p className="lede">{panel.lede}</p>
+                  <ul className="process-feat">
+                    {panel.feats.map((f) => (
+                      <li key={f}>{f}</li>
+                    ))}
+                  </ul>
+                </motion.div>
+              </AnimatePresence>
+            </Reveal>
+          </div>
+        </section>
+
+        {/* ---------- REVIEWS ---------- */}
+        <section className="reviews" id="yorumlar">
+          <div className="wrap">
+            <Reveal className="sec-head">
+              <div className="sec-eyebrow">Google Yorumları</div>
+              <h2 className="display">Velilerimiz ne diyor?</h2>
+              <p>Velilerimizin Google üzerinden paylaştığı gerçek değerlendirmelerden bazıları.</p>
+            </Reveal>
+          </div>
+          <div className="review-track-wrap">
+            <div className="review-track">
+              {[...reviews, ...reviews].map((r, i) => {
+                const initials = r.name
+                  .split(" ")
+                  .map((w) => w[0])
+                  .join("");
+                return (
+                  <div className="review-card" key={i}>
+                    <div className="stars">★★★★★</div>
+                    <p>{r.text}</p>
+                    <div className="review-who">
+                      <div className="review-avatar">{initials}</div>
+                      <div>
+                        <strong>{r.name}</strong>
+                        <span>Google üzerinden paylaşıldı</span>
+                      </div>
+                    </div>
+                  </div>
+                );
+              })}
+            </div>
+          </div>
+          <div className="wrap" style={{ marginTop: 34 }}>
+            <a
+              href="https://www.google.com/search?q=idil+h%C4%B1zl%C4%B1+okuma+yorumlar"
+              className="hero-link"
+            >
+              Tüm Google yorumlarını gör →
+            </a>
+          </div>
+        </section>
+
+        {/* ---------- CTA ---------- */}
+        <section className="cta">
+          <div className="wrap">
+            <Reveal className="cta-box">
+              <h2 className="display">Seviyeye uygun program için bilgi alın</h2>
+              <p>
+                Ücretsiz ön görüşme ile öğrencinize en uygun hızlı okuma programını birlikte
+                belirleyelim.
+              </p>
+              <div className="cta-ctas">
+                <a
+                  href={WHATSAPP_URL}
+                  className="btn btn-primary"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  onClick={trackWhatsAppClick}
+                >
+                  WhatsApp&apos;tan Yazın
+                </a>
+                <a href="tel:+905462396786" className="btn btn-ghost">
+                  Telefonla Bilgi Al
+                </a>
+              </div>
+            </Reveal>
+          </div>
+        </section>
+
         {/* ---------- CONTACT FORM ---------- */}
         <section className="contact-section" id="iletisim-formu">
           <div className="wrap">
@@ -1112,121 +1245,48 @@ export default function Home() {
           </div>
         </section>
 
-        {/* ---------- PROCESS ---------- */}
-        <section className="process" id="surec">
-          <div className="wrap">
-            <Reveal className="sec-head">
-              <div className="sec-eyebrow">Eğitim Süreci</div>
-              <h2 className="display">Eğitim sürecini kısaca tanıyın</h2>
-            </Reveal>
-            <Reveal className="process-shell">
-              <div className="process-tabs">
-                {processData.map((p, i) => (
-                  <button
-                    key={p.label}
-                    className={`p-tab ${activeTab === i ? "active" : ""}`}
-                    onClick={() => setActiveTab(i)}
-                  >
-                    <span className="tnum mono">{String(i + 1).padStart(2, "0")}</span>
-                    {p.label}
-                  </button>
-                ))}
-              </div>
-              <AnimatePresence mode="wait">
-                <motion.div
-                  key={activeTab}
-                  initial={{ opacity: 0, y: 14 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ duration: 0.5, ease: "easeOut" }}
-                >
-                  <h3 className="display">{panel.title}</h3>
-                  <p className="lede">{panel.lede}</p>
-                  <ul className="process-feat">
-                    {panel.feats.map((f) => (
-                      <li key={f}>{f}</li>
-                    ))}
-                  </ul>
-                </motion.div>
-              </AnimatePresence>
-            </Reveal>
-          </div>
-        </section>
-
-        {/* ---------- REVIEWS ---------- */}
-        <section className="reviews" id="yorumlar">
-          <div className="wrap">
-            <Reveal className="sec-head">
-              <div className="sec-eyebrow">Google Yorumları</div>
-              <h2 className="display">Velilerimiz ne diyor?</h2>
-              <p>Velilerimizin Google üzerinden paylaştığı gerçek değerlendirmelerden bazıları.</p>
-            </Reveal>
-          </div>
-          <div className="review-track-wrap">
-            <div className="review-track">
-              {[...reviews, ...reviews].map((r, i) => {
-                const initials = r.name
-                  .split(" ")
-                  .map((w) => w[0])
-                  .join("");
-                return (
-                  <div className="review-card" key={i}>
-                    <div className="stars">★★★★★</div>
-                    <p>{r.text}</p>
-                    <div className="review-who">
-                      <div className="review-avatar">{initials}</div>
-                      <div>
-                        <strong>{r.name}</strong>
-                        <span>Google üzerinden paylaşıldı</span>
-                      </div>
-                    </div>
-                  </div>
-                );
-              })}
-            </div>
-          </div>
-          <div className="wrap" style={{ marginTop: 34 }}>
-            <a
-              href="https://www.google.com/search?q=idil+h%C4%B1zl%C4%B1+okuma+yorumlar"
-              className="hero-link"
-            >
-              Tüm Google yorumlarını gör →
-            </a>
-          </div>
-        </section>
-
         {/* ---------- FAQ ---------- */}
         <section className="faq" id="sss">
           <div className="wrap">
             <Reveal className="sec-head">
               <div className="sec-eyebrow">SSS</div>
-              <h2 className="display">Kısa cevaplar</h2>
+              <h2 className="display">Sık Sorulan Sorular</h2>
+              <p>
+                Online hızlı okuma eğitimi, eğitim paketleri ve çalışma sistemi hakkında merak
+                edilen soruların yanıtlarını inceleyin.
+              </p>
             </Reveal>
             <Reveal className="faq-list">
               {faqData.map((item, i) => {
                 const isOpen = openFaq === i;
+                const questionId = `faq-question-${i + 1}`;
+                const answerId = `faq-answer-${i + 1}`;
                 return (
                   <div className={`faq-item ${isOpen ? "open" : ""}`} key={item.q}>
                     <button
+                      id={questionId}
+                      type="button"
                       className="faq-q"
                       onClick={() => setOpenFaq(isOpen ? null : i)}
+                      aria-expanded={isOpen}
+                      aria-controls={answerId}
                     >
-                      {item.q}
-                      <span className="faq-plus" />
+                      <span>{item.q}</span>
+                      <span className="faq-plus" aria-hidden="true" />
                     </button>
-                    <AnimatePresence initial={false}>
-                      {isOpen && (
-                        <motion.div
-                          className="faq-a"
-                          initial={{ height: 0 }}
-                          animate={{ height: "auto" }}
-                          exit={{ height: 0 }}
-                          transition={{ duration: 0.4, ease: [0.16, 0.84, 0.44, 1] }}
-                          style={{ overflow: "hidden" }}
-                        >
-                          <p>{item.a}</p>
-                        </motion.div>
-                      )}
-                    </AnimatePresence>
+                    <motion.div
+                      id={answerId}
+                      className="faq-a"
+                      role="region"
+                      aria-labelledby={questionId}
+                      aria-hidden={!isOpen}
+                      initial={false}
+                      animate={{ height: isOpen ? "auto" : 0 }}
+                      transition={{ duration: 0.28, ease: [0.16, 0.84, 0.44, 1] }}
+                      style={{ overflow: "hidden" }}
+                    >
+                      <p>{item.a}</p>
+                    </motion.div>
                   </div>
                 );
               })}
@@ -1234,32 +1294,6 @@ export default function Home() {
           </div>
         </section>
 
-        {/* ---------- CTA ---------- */}
-        <section className="cta">
-          <div className="wrap">
-            <Reveal className="cta-box">
-              <h2 className="display">Seviyeye uygun program için bilgi alın</h2>
-              <p>
-                Ücretsiz ön görüşme ile öğrencinize en uygun hızlı okuma programını birlikte
-                belirleyelim.
-              </p>
-              <div className="cta-ctas">
-                <a
-                  href={WHATSAPP_URL}
-                  className="btn btn-primary"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  onClick={trackWhatsAppClick}
-                >
-                  WhatsApp&apos;tan Yazın
-                </a>
-                <a href="tel:+905462396786" className="btn btn-ghost">
-                  Telefonla Bilgi Al
-                </a>
-              </div>
-            </Reveal>
-          </div>
-        </section>
       </main>
 
       {/* ---------- FOOTER ---------- */}
@@ -2491,18 +2525,35 @@ export default function Home() {
         }
 
         .faq {
-          padding: 0 0 110px;
+          padding: 100px 0 110px;
+        }
+        .faq .sec-head {
+          max-width: 760px;
+          margin-right: auto;
+          margin-left: auto;
+          text-align: center;
+        }
+        .faq .sec-eyebrow {
+          justify-content: center;
         }
         .faq-list {
           display: grid;
           gap: 14px;
-          max-width: 820px;
+          max-width: 900px;
+          margin: 0 auto;
         }
         .faq-item {
           background: #fff;
           border: 1px solid var(--line);
           border-radius: 18px;
           overflow: hidden;
+          box-shadow: 0 12px 32px -28px rgba(18, 20, 43, 0.35);
+          transition: border-color 0.2s ease, box-shadow 0.2s ease;
+        }
+        .faq-item:hover,
+        .faq-item.open {
+          border-color: rgba(23, 163, 152, 0.35);
+          box-shadow: 0 18px 38px -28px rgba(18, 20, 43, 0.48);
         }
         .faq-q {
           width: 100%;
@@ -2518,6 +2569,12 @@ export default function Home() {
           font-size: 1rem;
           font-weight: 700;
           font-family: "Fraunces", serif;
+          line-height: 1.45;
+          color: var(--ink);
+        }
+        .faq-q:focus-visible {
+          outline: 3px solid rgba(37, 99, 235, 0.45);
+          outline-offset: -3px;
         }
         .faq-plus {
           width: 30px;
@@ -2560,7 +2617,7 @@ export default function Home() {
         .faq-a p {
           padding: 0 26px 24px;
           color: var(--text-dim);
-          line-height: 1.65;
+          line-height: 1.75;
           font-size: 0.94rem;
         }
 
@@ -2796,6 +2853,27 @@ export default function Home() {
           }
           .contact-submit {
             width: 100%;
+          }
+          .faq {
+            padding: 72px 0 80px;
+          }
+          .faq .sec-head {
+            margin-bottom: 36px;
+          }
+          .faq-list {
+            gap: 12px;
+          }
+          .faq-q {
+            padding: 19px 18px;
+            font-size: 0.96rem;
+          }
+          .faq-plus {
+            width: 28px;
+            height: 28px;
+          }
+          .faq-a p {
+            padding: 0 18px 20px;
+            font-size: 0.9rem;
           }
           .stats-grid {
             grid-template-columns: 1fr;
