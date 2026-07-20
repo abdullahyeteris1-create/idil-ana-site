@@ -401,11 +401,20 @@ const trackMetaLead = () => {
   }
 };
 
-const trackWhatsAppClick = () => {
+const trackWhatsAppClick = (event: React.MouseEvent<HTMLAnchorElement>) => {
   if (typeof window !== "undefined") {
     const gtag = (window as TrackingWindow).gtag;
 
     if (typeof gtag === "function") {
+      const link = event.currentTarget;
+      const linkText = link.getAttribute("aria-label") ?? link.textContent?.trim() ?? "WhatsApp";
+
+      gtag("event", "whatsapp_click", {
+        link_url: link.href,
+        link_text: linkText,
+        page_location: window.location.href,
+      });
+
       gtag("event", "conversion", {
         send_to: GOOGLE_ADS_WHATSAPP_CONVERSION_ID,
       });
