@@ -862,6 +862,57 @@ export default function Home() {
           </div>
         </section>
 
+        {/* ---------- APPROACH ---------- */}
+        <section className="approach" id="yontem">
+          <div className="wrap">
+            <Reveal className="sec-head">
+              <div className="sec-eyebrow">Yöntemimiz</div>
+              <h2 className="display">Sonuç odaklı, üç adımlı bir yaklaşım</h2>
+              <p>
+                Her ders, dikkat ve odaklanmadan başlayıp birebir online çalışmayla derinleşen ve
+                düzenli alıştırmayla kalıcı hale gelen aynı yöntemi izler.
+              </p>
+            </Reveal>
+
+            <div className="approach-grid">
+              {[
+                {
+                  img: "/images/sections/odakli-okuma.jpg",
+                  icon: "①",
+                  title: "Dikkat ve Odaklanma",
+                  text: "Öğrenci; göz atlamalarını azaltan, satır ve kelime grubu takibini güçlendiren tekniklerle dikkatini uzun süre koruyabilmeyi öğrenir.",
+                },
+                {
+                  img: "/images/sections/online-egitim.jpg",
+                  icon: "②",
+                  title: "Birebir Online Ders",
+                  text: "Öğrenci evinden, öğretmenle birebir bağlantı kurarak canlı derse katılır; kazanılan tekniği aynı seansta egzersizlere uygular.",
+                },
+                {
+                  img: "/images/sections/cocuk.jpg",
+                  icon: "③",
+                  title: "Düzenli Alıştırma",
+                  text: "Kısa ve düzenli alıştırmalarla kazanılan beceri kalıcı hale gelir; her oturumda hız ve anlama ölçülerek gelişim raporlanır.",
+                },
+              ].map((step, i) => (
+                <Reveal className="approach-card" delay={i * 0.1} key={step.title}>
+                  <div className="approach-media">
+                    <Image
+                      src={step.img}
+                      alt={step.title}
+                      fill
+                      sizes="(max-width: 900px) 90vw, 31vw"
+                    />
+                    <span className="approach-icon">{step.icon}</span>
+                  </div>
+                  <h3>{step.title}</h3>
+                  <p>{step.text}</p>
+                </Reveal>
+              ))}
+            </div>
+          </div>
+        </section>
+
         {/* ---------- GROUPS ---------- */}
         <section className="groups" id="gruplar">
           <div className="wrap">
@@ -1962,6 +2013,67 @@ export default function Home() {
           line-height: 1.6;
         }
 
+        .approach {
+          padding: 100px 0;
+        }
+        .approach-grid {
+          display: grid;
+          grid-template-columns: repeat(3, 1fr);
+          gap: 28px;
+          margin-top: 44px;
+        }
+        .approach-card {
+          background: #fff;
+          border: 1px solid var(--line);
+          border-radius: 22px;
+          padding: 22px;
+          transition: transform 0.4s cubic-bezier(0.16, 0.84, 0.44, 1), box-shadow 0.4s ease;
+        }
+        .approach-card:hover {
+          transform: translateY(-8px);
+          box-shadow: 0 24px 48px -26px rgba(18, 20, 43, 0.35);
+        }
+        .approach-card h3 {
+          font-family: "Fraunces", serif;
+          font-size: 1.15rem;
+          margin-bottom: 10px;
+        }
+        .approach-card p {
+          font-size: 0.9rem;
+          line-height: 1.65;
+          color: var(--text-dim);
+        }
+        .approach-media {
+          position: relative;
+          aspect-ratio: 4/3;
+          border-radius: 16px;
+          overflow: hidden;
+          margin-bottom: 20px;
+        }
+        .approach-media img {
+          object-fit: cover;
+          transition: transform 0.6s cubic-bezier(0.16, 0.84, 0.44, 1);
+        }
+        .approach-card:hover .approach-media img {
+          transform: scale(1.08);
+        }
+        .approach-icon {
+          position: absolute;
+          left: 14px;
+          bottom: 14px;
+          width: 38px;
+          height: 38px;
+          border-radius: 50%;
+          background: linear-gradient(135deg, var(--coral), var(--coral-deep));
+          color: #fff;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          font-weight: 700;
+          font-size: 0.95rem;
+          box-shadow: 0 10px 20px -10px rgba(232, 80, 42, 0.7);
+        }
+
         .groups {
           padding: 110px 0 60px;
         }
@@ -2526,7 +2638,7 @@ export default function Home() {
           display: flex;
           gap: 20px;
           width: max-content;
-          animation: scrollX 46s linear infinite;
+          animation: scrollX 220s linear infinite;
           padding: 0 32px;
         }
         .review-track:hover {
@@ -2842,6 +2954,9 @@ export default function Home() {
           .group-cards {
             grid-template-columns: repeat(3, 1fr);
           }
+          .approach-grid {
+            grid-template-columns: repeat(2, 1fr);
+          }
           .group-detail {
             grid-template-columns: 1fr;
           }
@@ -2903,6 +3018,9 @@ export default function Home() {
           }
           .group-cards {
             grid-template-columns: repeat(2, 1fr);
+          }
+          .approach-grid {
+            grid-template-columns: 1fr;
           }
           .packages {
             padding: 80px 0;
