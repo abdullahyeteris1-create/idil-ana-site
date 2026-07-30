@@ -309,6 +309,19 @@ const faqData = [
   },
 ];
 
+/** Bu uzunluğun üstündeki yorumlar kartta kırpılır ve pencerede tam gösterilir. */
+const REVIEW_CLAMP_LENGTH = 210;
+
+function getInitials(name: string) {
+  return name
+    .split(" ")
+    .filter(Boolean)
+    .map((word) => word[0])
+    .join("")
+    .slice(0, 2)
+    .toLocaleUpperCase("tr-TR");
+}
+
 const rsvpText =
   "Daha hızlı oku daha doğru anla İdil Hızlı Okuma okuma hızını anlama becerisini dikkat ve odaklanmayı birlikte geliştirir her öğrenci kendi seviyesinden başlar";
 const rsvpWords = rsvpText.split(" ");
@@ -587,6 +600,8 @@ export default function Home() {
   const [activeGroup, setActiveGroup] = useState(0);
   const [activeTab, setActiveTab] = useState(0);
   const [openFaq, setOpenFaq] = useState<number | null>(null);
+  const [openReview, setOpenReview] = useState<(typeof reviews)[number] | null>(null);
+  const reviewDialogRef = useRef<HTMLDialogElement>(null);
   const [contactForm, setContactForm] = useState<ContactFormValues>(emptyContactForm);
   const [contactErrors, setContactErrors] = useState<Partial<Record<ContactField, string>>>({});
   const [contactStatus, setContactStatus] = useState<"idle" | "submitting" | "success" | "error">(
@@ -616,6 +631,18 @@ export default function Home() {
       window.removeEventListener("keydown", onKeyDown);
     };
   }, [menuOpen]);
+
+  // Native <dialog>; odak tuzağı ve Esc ile kapanma tarayıcıdan gelir.
+  useEffect(() => {
+    const dialog = reviewDialogRef.current;
+    if (!dialog) return;
+
+    if (openReview && !dialog.open) {
+      dialog.showModal();
+    } else if (!openReview && dialog.open) {
+      dialog.close();
+    }
+  }, [openReview]);
 
   // Masaüstü genişliğine dönüldüğünde açık kalan menüyü kapat.
   useEffect(() => {
@@ -1159,27 +1186,25 @@ export default function Home() {
           <div className="review-track-wrap">
             <div className="review-track">
               {[...reviews, ...reviews].map((r, i) => {
-                const initials = r.name
-                  .split(" ")
-                  .map((w) => w[0])
-                  .join("");
-                const isLong = r.text.length > 210;
+                const isLong = r.text.length > REVIEW_CLAMP_LENGTH;
                 return (
                   <div className="review-card" key={i}>
                     <div className="stars">★★★★★</div>
                     <p>{r.text}</p>
+                    {/* Eskiden genel bir Google aramasına giden ölü bir bağlantıydı;
+                        artık yorumun tamamını yerinde açıyor. */}
                     {isLong && (
-                      <a
-                        href="https://www.google.com/search?q=idil+h%C4%B1zl%C4%B1+okuma+yorumlar"
+                      <button
+                        type="button"
                         className="review-more"
-                        target="_blank"
-                        rel="noopener noreferrer"
+                        onClick={() => setOpenReview(r)}
+                        aria-label={`${r.name} yorumunun tamamını oku`}
                       >
                         Devamını oku →
-                      </a>
+                      </button>
                     )}
                     <div className="review-who">
-                      <div className="review-avatar">{initials}</div>
+                      <div className="review-avatar">{getInitials(r.name)}</div>
                       <div>
                         <strong>{r.name}</strong>
                         <span>Google üzerinden paylaşıldı</span>
@@ -1194,10 +1219,45 @@ export default function Home() {
             <a
               href="https://www.google.com/search?q=idil+h%C4%B1zl%C4%B1+okuma+yorumlar"
               className="hero-link"
+              target="_blank"
+              rel="noopener noreferrer"
             >
               Tüm Google yorumlarını gör →
             </a>
           </div>
+
+          <dialog
+            ref={reviewDialogRef}
+            className="review-dialog"
+            aria-labelledby="review-dialog-title"
+            onClose={() => setOpenReview(null)}
+            onClick={(event) => {
+              // Pencerenin dışına (backdrop) tıklandığında kapat.
+              if (event.target === reviewDialogRef.current) setOpenReview(null);
+            }}
+          >
+            {openReview && (
+              <div className="review-dialog-inner">
+                <button
+                  type="button"
+                  className="review-dialog-close"
+                  onClick={() => setOpenReview(null)}
+                  aria-label="Yorumu kapat"
+                >
+                  ×
+                </button>
+                <div className="stars">★★★★★</div>
+                <p className="review-dialog-text">{openReview.text}</p>
+                <div className="review-who">
+                  <div className="review-avatar">{getInitials(openReview.name)}</div>
+                  <div>
+                    <strong id="review-dialog-title">{openReview.name}</strong>
+                    <span>Google üzerinden paylaşıldı</span>
+                  </div>
+                </div>
+              </div>
+            )}
+          </dialog>
         </section>
 
         {/* ---------- CTA ---------- */}
@@ -1374,12 +1434,14 @@ export default function Home() {
                   )}
                 </div>
 
+                {/* Buton eskiden KVKK onayı verilmeden pasifti; kullanıcı nedenini
+                    göremiyordu. Artık aktif kalıp eksik alanı hata mesajıyla gösteriyor. */}
                 <button
                   type="submit"
                   className={`btn btn-primary contact-submit ${
                     contactStatus === "submitting" ? "is-submitting" : ""
                   }`}
-                  disabled={contactStatus === "submitting" || !contactForm.consentAccepted}
+                  disabled={contactStatus === "submitting"}
                 >
                   {contactStatus === "submitting" ? (
                     <>
