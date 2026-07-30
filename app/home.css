@@ -1406,6 +1406,59 @@ html {
   letter-spacing: 2px;
   margin-bottom: 14px;
 }
+/* Puan yalnızca düz metin olarak gösterilir; AggregateRating işaretlemesi
+   Google politikası gereği yapılmaz (bkz. lib/seo.ts). */
+.google-rating {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  margin-top: 20px;
+  padding: 10px 18px 10px 14px;
+  border: 1px solid var(--line);
+  border-radius: 100px;
+  background: #fff;
+  box-shadow: 0 6px 18px -10px rgba(18, 20, 43, 0.28);
+  transition: transform 0.25s ease, box-shadow 0.25s ease;
+}
+.google-rating:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 10px 24px -10px rgba(18, 20, 43, 0.34);
+}
+.google-rating:focus-visible {
+  outline: 3px solid rgba(23, 163, 152, 0.4);
+  outline-offset: 3px;
+}
+.google-rating-score {
+  font-family: var(--font-mono), ui-monospace, monospace;
+  font-size: 1.28rem;
+  font-weight: 800;
+  line-height: 1;
+  color: var(--ink);
+}
+.google-rating-stars {
+  color: var(--sun);
+  font-size: 0.95rem;
+  letter-spacing: 1px;
+}
+.google-rating-count {
+  font-size: 0.85rem;
+  font-weight: 700;
+  color: var(--text-dim);
+}
+
+.review-dialog-source {
+  display: inline-flex;
+  align-items: center;
+  min-height: 40px;
+  margin-top: 18px;
+  font-size: 0.82rem;
+  font-weight: 700;
+  color: var(--teal-deep);
+}
+.review-dialog-source:hover {
+  text-decoration: underline;
+}
+
 .review-track-wrap {
   position: relative;
   /* Sarmalayıcı .wrap içinde değil, zaten tam genişlikte. Negatif kenar

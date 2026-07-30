@@ -10,6 +10,9 @@ import { FaInstagram, FaWhatsapp } from "react-icons/fa";
 import {
   DEFAULT_DESCRIPTION,
   DEFAULT_TITLE,
+  GOOGLE_RATING,
+  GOOGLE_REVIEWS_URL,
+  GOOGLE_REVIEW_COUNT,
   INSTAGRAM_URL,
   LOGO_PATH,
   SITE_NAME,
@@ -390,7 +393,8 @@ const homeJsonLd = {
       logo: absoluteUrl(LOGO_PATH),
       description: DEFAULT_DESCRIPTION,
       telephone: PHONE_NUMBER_E164,
-      sameAs: [INSTAGRAM_URL],
+      // sameAs yalnızca kimlik eşleştirmesidir, puan işaretlemesi değildir.
+      sameAs: [INSTAGRAM_URL, GOOGLE_REVIEWS_URL],
     },
     {
       "@type": "WebSite",
@@ -1212,6 +1216,21 @@ export default function Home() {
               <div className="sec-eyebrow">Google Yorumları</div>
               <h2 className="display">Velilerimiz ne diyor?</h2>
               <p>Velilerimizin Google üzerinden paylaştığı gerçek değerlendirmelerden bazıları.</p>
+              <a
+                className="google-rating"
+                href={GOOGLE_REVIEWS_URL}
+                target="_blank"
+                rel="noopener noreferrer"
+                aria-label={`Google'da ${GOOGLE_REVIEW_COUNT} değerlendirme, ${GOOGLE_RATING} ortalama. Google işletme sayfasını aç.`}
+              >
+                <span className="google-rating-score">{GOOGLE_RATING}</span>
+                <span className="google-rating-stars" aria-hidden="true">
+                  ★★★★★
+                </span>
+                <span className="google-rating-count">
+                  {`Google'da ${GOOGLE_REVIEW_COUNT} değerlendirme`}
+                </span>
+              </a>
             </Reveal>
           </div>
           <div className="review-track-wrap">
@@ -1248,12 +1267,12 @@ export default function Home() {
           </div>
           <div className="wrap" style={{ marginTop: 34 }}>
             <a
-              href="https://www.google.com/search?q=idil+h%C4%B1zl%C4%B1+okuma+yorumlar"
+              href={GOOGLE_REVIEWS_URL}
               className="hero-link"
               target="_blank"
               rel="noopener noreferrer"
             >
-              Tüm Google yorumlarını gör →
+              {`${GOOGLE_REVIEW_COUNT} değerlendirmenin tamamını Google'da gör →`}
             </a>
           </div>
 
@@ -1286,6 +1305,14 @@ export default function Home() {
                     <span>Google üzerinden paylaşıldı</span>
                   </div>
                 </div>
+                <a
+                  className="review-dialog-source"
+                  href={GOOGLE_REVIEWS_URL}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  Bu yorumları Google&apos;da gör →
+                </a>
               </div>
             )}
           </dialog>

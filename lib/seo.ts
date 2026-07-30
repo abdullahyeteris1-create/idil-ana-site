@@ -8,6 +8,19 @@ export const DEFAULT_DESCRIPTION =
 export const OG_IMAGE_PATH = "/og-image.png";
 export const LOGO_PATH = "/images/icons/idil-logo.png";
 export const INSTAGRAM_URL = "https://www.instagram.com/idilhizliokuma/";
+export const GOOGLE_REVIEWS_URL = "https://maps.app.goo.gl/MSQmokPxnHK9FdfN6";
+
+/**
+ * Google değerlendirmeleri. Sitede yalnızca düz metin olarak gösterilir;
+ * AggregateRating şeması olarak İŞARETLENMEZ. Google'ın structured data
+ * kuralları başka bir siteden toplanan puanların işaretlenmesini ve
+ * işletmenin kendi hakkındaki yorumları kendi sayfasında yıldızlamasını
+ * yasaklıyor.
+ *
+ * Bu değerler elle güncellenir; yorum sayısı arttıkça buradan değiştirin.
+ */
+export const GOOGLE_RATING = "5,0";
+export const GOOGLE_REVIEW_COUNT = 53;
 
 export const SEO_KEYWORDS = [
   "hızlı okuma eğitimi",
