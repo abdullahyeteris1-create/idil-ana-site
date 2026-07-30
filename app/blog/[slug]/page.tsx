@@ -3,6 +3,7 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import { BlogArticle } from "@/components/blog/BlogArticle";
 import { BlogCard } from "@/components/blog/BlogCard";
+import { SiteFooter, SiteHeader } from "@/components/SiteChrome";
 import { WhatsAppLink } from "@/components/WhatsAppLink";
 import { blogPosts, getBlogPost, getRelatedBlogPosts } from "@/lib/blog";
 import { LOGO_PATH, SITE_NAME, absoluteUrl } from "@/lib/seo";
@@ -139,25 +140,11 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
         dangerouslySetInnerHTML={{ __html: serializedStructuredData }}
       />
 
-      <header className="border-b border-black/10 bg-[#fbf7f0]">
-        <nav
-          className="mx-auto flex max-w-6xl items-center justify-between gap-5 px-5 py-5 sm:px-8"
-          aria-label="Blog yazısı navigasyonu"
-        >
-          <Link
-            href="/"
-            className="font-heading text-xl font-black text-[#12142b] transition-colors hover:text-[#e8502a] focus-visible:rounded focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#0e7a72]"
-          >
-            İdil Eğitim
-          </Link>
-          <Link
-            href="/blog"
-            className="text-sm font-extrabold text-[#0e7a72] transition-colors hover:text-[#e8502a] focus-visible:rounded focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#0e7a72]"
-          >
-            ← Tüm Blog Yazıları
-          </Link>
-        </nav>
-      </header>
+      <SiteHeader
+        backHref="/blog"
+        backLabel="← Tüm Blog Yazıları"
+        ariaLabel="Blog yazısı navigasyonu"
+      />
 
       <main className="overflow-x-hidden bg-[#fbf7f0] px-5 pb-0 pt-14 text-[#12142b] sm:px-8 sm:pt-20">
         <div className="mx-auto max-w-6xl">
@@ -196,16 +183,7 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
         </section>
       </main>
 
-      <footer className="bg-[#0b0d20] px-5 py-8 text-sm text-white/65 sm:px-8">
-        <div className="mx-auto flex max-w-6xl flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
-          <p>© 2026 İdil Eğitim. Tüm hakları saklıdır.</p>
-          <div className="flex flex-wrap gap-5 font-bold text-white/85">
-            <Link href="/">Ana Sayfa</Link>
-            <Link href="/blog">Blog</Link>
-            <Link href="/#iletisim-formu">İletişim</Link>
-          </div>
-        </div>
-      </footer>
+      <SiteFooter className="bg-[#0b0d20]" />
     </>
   );
 }

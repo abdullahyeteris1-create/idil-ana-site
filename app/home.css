@@ -1575,6 +1575,25 @@ html {
   font-size: 0.8rem;
   color: rgba(251, 247, 240, 0.4);
 }
+.foot-legal {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 18px;
+}
+.foot-legal a,
+.foot-legal button {
+  border: none;
+  background: none;
+  padding: 0;
+  font: inherit;
+  color: rgba(251, 247, 240, 0.55);
+  cursor: pointer;
+}
+.foot-legal a:hover,
+.foot-legal button:hover {
+  color: var(--coral);
+  text-decoration: underline;
+}
 @media (max-width: 1160px) {
   .nav-links {
     display: none;

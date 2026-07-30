@@ -24,6 +24,7 @@ import {
   whatsappUrl,
 } from "@/lib/contact";
 import { trackContactFormSuccess, trackWhatsAppClick } from "@/lib/tracking";
+import { CookiePreferencesButton } from "@/components/CookieConsent";
 import "./home.css";
 
 /* =========================================================
@@ -404,6 +405,14 @@ const homeJsonLd = {
         "Okuma hızını, anlama becerisini ve dikkati birlikte geliştiren takipli online çalışma sistemi.",
       provider: { "@id": `${SITE_URL}/#organization` },
       inLanguage: "tr-TR",
+      url: absoluteUrl("/hizli-okuma-egitimi"),
+      // Google'ın kurs zengin sonucu için hasCourseInstance zorunlu.
+      hasCourseInstance: {
+        "@type": "CourseInstance",
+        courseMode: "online",
+        courseWorkload: "PT3H",
+        inLanguage: "tr-TR",
+      },
       offers: packageOffersJsonLd,
     },
     {
@@ -1478,6 +1487,10 @@ export default function Home() {
           </div>
           <div className="foot-bottom">
             <span>© {year} İdil Hızlı Okuma. Tüm hakları saklıdır.</span>
+            <span className="foot-legal">
+              <Link href="/kvkk-aydinlatma-metni">KVKK Aydınlatma Metni</Link>
+              <CookiePreferencesButton />
+            </span>
           </div>
         </div>
       </footer>

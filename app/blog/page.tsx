@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
-import Link from "next/link";
 import { BlogCard } from "@/components/blog/BlogCard";
+import { SiteFooter, SiteHeader } from "@/components/SiteChrome";
 import { blogPosts } from "@/lib/blog";
 import { SITE_NAME, absoluteUrl } from "@/lib/seo";
 
@@ -84,25 +84,7 @@ export default function BlogPage() {
         dangerouslySetInnerHTML={{ __html: serializedBlogJsonLd }}
       />
 
-      <header className="border-b border-black/10 bg-[#fbf7f0]">
-        <nav
-          className="mx-auto flex max-w-6xl items-center justify-between gap-5 px-5 py-5 sm:px-8"
-          aria-label="Blog navigasyonu"
-        >
-          <Link
-            href="/"
-            className="font-heading text-xl font-black text-[#12142b] transition-colors hover:text-[#e8502a] focus-visible:rounded focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#0e7a72]"
-          >
-            İdil Eğitim
-          </Link>
-          <Link
-            href="/"
-            className="text-sm font-extrabold text-[#0e7a72] transition-colors hover:text-[#e8502a] focus-visible:rounded focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#0e7a72]"
-          >
-            ← Ana Sayfa
-          </Link>
-        </nav>
-      </header>
+      <SiteHeader ariaLabel="Blog navigasyonu" />
 
       <main className="min-h-screen overflow-x-hidden bg-[#fbf7f0] text-[#12142b]">
         <section className="px-5 pb-14 pt-16 text-center sm:px-8 sm:pb-20 sm:pt-24">
@@ -143,16 +125,7 @@ export default function BlogPage() {
         </section>
       </main>
 
-      <footer className="bg-[#12142b] px-5 py-10 text-[#fbf7f0] sm:px-8">
-        <div className="mx-auto flex max-w-6xl flex-col gap-4 text-sm sm:flex-row sm:items-center sm:justify-between">
-          <p>© 2026 İdil Eğitim. Tüm hakları saklıdır.</p>
-          <div className="flex flex-wrap gap-5 font-bold">
-            <Link href="/">Ana Sayfa</Link>
-            <Link href="/#paketler">Eğitim Paketleri</Link>
-            <Link href="/#iletisim-formu">İletişim</Link>
-          </div>
-        </div>
-      </footer>
+      <SiteFooter />
     </>
   );
 }
