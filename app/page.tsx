@@ -4,7 +4,7 @@ import { useEffect, useRef, useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { motion, AnimatePresence, useInView, Variants } from "framer-motion";
+import { motion, AnimatePresence, useInView, useReducedMotion, Variants } from "framer-motion";
 import { Check, Headphones, LoaderCircle, MessageCircle, Send, ShoppingBag } from "lucide-react";
 import { FaInstagram, FaWhatsapp } from "react-icons/fa";
 import {
@@ -454,6 +454,14 @@ function Reveal({
   className?: string;
   delay?: number;
 }) {
+  // CSS'teki prefers-reduced-motion kuralı framer-motion'ı etkilemiyor;
+  // hareket tercihi burada ayrıca kontrol edilmeli.
+  const reduceMotion = useReducedMotion();
+
+  if (reduceMotion) {
+    return <div className={className}>{children}</div>;
+  }
+
   return (
     <motion.div
       className={className}
@@ -475,10 +483,12 @@ function Reveal({
 function Counter({ to, suffix = "" }: { to: number; suffix?: string }) {
   const ref = useRef<HTMLSpanElement>(null);
   const inView = useInView(ref, { once: true, amount: 0.6 });
+  const reduceMotion = useReducedMotion();
   const [value, setValue] = useState(0);
 
   useEffect(() => {
-    if (!inView) return;
+    // Hareket azaltma tercihinde sayaç hiç animasyonlanmaz, son değer gösterilir.
+    if (!inView || reduceMotion) return;
     const duration = 1400;
     const start = performance.now();
     let raf = 0;
@@ -490,11 +500,11 @@ function Counter({ to, suffix = "" }: { to: number; suffix?: string }) {
     }
     raf = requestAnimationFrame(tick);
     return () => cancelAnimationFrame(raf);
-  }, [inView, to]);
+  }, [inView, to, reduceMotion]);
 
   return (
     <span ref={ref} className="mono">
-      {value}
+      {reduceMotion ? to : value}
       {suffix}
     </span>
   );
@@ -571,6 +581,7 @@ function RsvpDemo() {
 
 export default function Home() {
   const pathname = usePathname();
+  const reduceMotion = useReducedMotion();
   const [scrolled, setScrolled] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
   const [activeGroup, setActiveGroup] = useState(0);
@@ -699,6 +710,9 @@ export default function Home() {
           dangerouslySetInnerHTML={{ __html: serializedHomeJsonLd }}
         />
       )}
+      <a href="#top" className="skip-link">
+        Ana içeriğe geç
+      </a>
       {/* ---------- HEADER ---------- */}
       <header id="siteHeader" className={scrolled ? "scrolled" : ""}>
         <div className="wrap nav">
@@ -959,25 +973,32 @@ export default function Home() {
               <p>Kartlardan birini seçin, aşağıdaki detay kutusu o gruba göre değişsin.</p>
             </Reveal>
 
+            {/* Kartlar <div onClick> idi: klavye ve ekran okuyucuyla seçilemiyordu. */}
             <Reveal className="group-cards">
               {groupData.map((g, i) => (
-                <div
+                <button
+                  type="button"
                   key={g.title}
                   className={`group-card ${activeGroup === i ? "active" : ""}`}
                   onClick={() => setActiveGroup(i)}
+                  aria-pressed={activeGroup === i}
+                  aria-label={`${g.title} detaylarını göster`}
                 >
                   <Image
                     src={g.img}
-                    alt={g.title}
+                    alt=""
+                    aria-hidden="true"
                     fill
                     sizes="(max-width: 640px) 45vw, (max-width: 980px) 30vw, 212px"
                   />
-                  <div className="group-card-overlay">
+                  <span className="group-card-overlay">
                     <span className="num">{g.num}</span>
-                    <h3>{g.title.split(" ").slice(0, 2).join(" ")}</h3>
+                    <span className="group-card-title">
+                      {g.title.split(" ").slice(0, 2).join(" ")}
+                    </span>
                     <span>{g.tag}</span>
-                  </div>
-                </div>
+                  </span>
+                </button>
               ))}
             </Reveal>
 
@@ -1108,9 +1129,10 @@ export default function Home() {
               <AnimatePresence mode="wait">
                 <motion.div
                   key={activeTab}
-                  initial={{ opacity: 0, y: 14 }}
+                  className="process-panel"
+                  initial={reduceMotion ? false : { opacity: 0, y: 14 }}
                   animate={{ opacity: 1, y: 0 }}
-                  transition={{ duration: 0.5, ease: "easeOut" }}
+                  transition={reduceMotion ? { duration: 0 } : { duration: 0.5, ease: "easeOut" }}
                 >
                   <h3 className="display">{panel.title}</h3>
                   <p className="lede">{panel.lede}</p>
@@ -1430,7 +1452,11 @@ export default function Home() {
                       aria-hidden={!isOpen}
                       initial={false}
                       animate={{ height: isOpen ? "auto" : 0 }}
-                      transition={{ duration: 0.28, ease: [0.16, 0.84, 0.44, 1] }}
+                      transition={
+                        reduceMotion
+                          ? { duration: 0 }
+                          : { duration: 0.28, ease: [0.16, 0.84, 0.44, 1] }
+                      }
                       style={{ overflow: "hidden" }}
                     >
                       <p>{item.a}</p>
@@ -1502,10 +1528,12 @@ export default function Home() {
         rel="noopener noreferrer"
         onClick={trackWhatsAppClick}
         aria-label="WhatsApp ile iletişim"
-        animate={{ y: [0, -8, 0] }}
+        animate={reduceMotion ? undefined : { y: [0, -8, 0] }}
         whileHover={{ scale: 1.08 }}
         whileTap={{ scale: 0.96 }}
-        transition={{ duration: 3, repeat: Infinity, ease: "easeInOut" }}
+        transition={
+          reduceMotion ? { duration: 0 } : { duration: 3, repeat: Infinity, ease: "easeInOut" }
+        }
         className="flex h-14 w-14 items-center justify-center rounded-full bg-green-500 text-white shadow-2xl fixed bottom-6 right-6 z-50"
       >
         <MessageCircle className="h-7 w-7" />

@@ -67,6 +67,22 @@ html {
   }
 }
 
+.skip-link {
+  position: absolute;
+  left: 16px;
+  top: -100px;
+  z-index: 200;
+  padding: 12px 20px;
+  border-radius: 0 0 12px 12px;
+  background: var(--ink);
+  color: var(--cream);
+  font-weight: 700;
+  transition: top 0.2s ease;
+}
+.skip-link:focus {
+  top: 0;
+}
+
 #siteHeader {
   position: fixed;
   top: 0;
@@ -726,6 +742,13 @@ html {
 }
 .group-card {
   cursor: pointer;
+  border: none;
+  padding: 0;
+  display: block;
+  width: 100%;
+  text-align: left;
+  font: inherit;
+  color: inherit;
   border-radius: 18px;
   overflow: hidden;
   position: relative;
@@ -733,6 +756,10 @@ html {
   background: var(--ink);
   box-shadow: 0 10px 24px -14px rgba(18, 20, 43, 0.4);
   transition: transform 0.35s cubic-bezier(0.16, 0.84, 0.44, 1), box-shadow 0.35s ease;
+}
+.group-card:focus-visible {
+  outline: 3px solid var(--teal);
+  outline-offset: 3px;
 }
 .group-card:hover {
   transform: translateY(-6px);
@@ -769,6 +796,12 @@ html {
   padding: 16px;
   z-index: 2;
 }
+.group-card-title {
+  color: #fff;
+  font-size: 1.02rem;
+  font-weight: 700;
+  font-family: var(--font-heading), Georgia, serif;
+}
 .group-card-overlay .num {
   font-family: var(--font-mono), ui-monospace, monospace;
   font-size: 0.7rem;
@@ -776,13 +809,7 @@ html {
   font-weight: 700;
   margin-bottom: 6px;
 }
-.group-card-overlay h3 {
-  color: #fff;
-  font-size: 1.02rem;
-  font-weight: 700;
-  font-family: var(--font-heading), Georgia, serif;
-}
-.group-card-overlay span {
+.group-card-overlay span:last-child {
   color: rgba(255, 255, 255, 0.65);
   font-size: 0.78rem;
   margin-top: 2px;
@@ -1255,7 +1282,9 @@ html {
 }
 .review-track-wrap {
   position: relative;
-  margin: 0 -32px;
+  /* Sarmalayıcı .wrap içinde değil, zaten tam genişlikte. Negatif kenar
+     boşluğu onu viewport dışına taşırıp kenar gradyanlarını görünmez
+     kılıyordu. */
 }
 .review-track-wrap::before,
 .review-track-wrap::after {
@@ -1280,7 +1309,8 @@ html {
   gap: 20px;
   width: max-content;
   animation: scrollX 220s linear infinite;
-  padding: 0 32px;
+  /* Yatay dolgu, translateX(-50%) döngüsünün yarım genişlik varsayımını
+     bozduğu için kaldırıldı. */
 }
 .review-track:hover {
   animation-play-state: paused;
@@ -1298,6 +1328,10 @@ html {
   flex-shrink: 0;
   display: flex;
   flex-direction: column;
+  /* Şerit 72 kart ve ~26.000px genişliğinde; ekran dışındaki kartların
+     düzen/boyama maliyeti tarayıcıya bırakılır. */
+  content-visibility: auto;
+  contain-intrinsic-size: auto 340px auto 260px;
   background: #fff;
   border: 1px solid var(--line);
   border-radius: 20px;
@@ -1743,6 +1777,9 @@ html {
   .faq-a p {
     padding: 0 18px 20px;
     font-size: 0.9rem;
+  }
+  .review-card {
+    width: 300px;
   }
   .stats-grid {
     grid-template-columns: 1fr;

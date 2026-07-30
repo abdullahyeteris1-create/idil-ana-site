@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server";
 import { Resend } from "resend";
+import { SITE_URL } from "@/lib/seo";
 
 type ContactRequestBody = {
   fullName?: unknown;
@@ -24,9 +25,61 @@ const VALID_GRADES = new Set([
   "8. Sınıf",
   "Diğer",
 ]);
+const MAX_TRACKED_CLIENTS = 5_000;
 const recentSubmissions = new Map<string, number>();
 
 export const runtime = "nodejs";
+
+/**
+ * Süresi dolmuş kayıtları temizler. Önceden Map hiç boşaltılmıyordu; uzun
+ * ömürlü bir sunucuda her gönderim kalıcı olarak bellekte birikiyordu.
+ */
+function pruneRecentSubmissions(now: number) {
+  for (const [key, timestamp] of recentSubmissions) {
+    if (now - timestamp >= RATE_LIMIT_WINDOW_MS) {
+      recentSubmissions.delete(key);
+    }
+  }
+
+  // Beklenmedik bir yük altında sınırsız büyümeye karşı son emniyet.
+  if (recentSubmissions.size > MAX_TRACKED_CLIENTS) {
+    const excess = recentSubmissions.size - MAX_TRACKED_CLIENTS;
+    let removed = 0;
+    for (const key of recentSubmissions.keys()) {
+      if (removed++ >= excess) break;
+      recentSubmissions.delete(key);
+    }
+  }
+}
+
+/**
+ * Formun yalnızca kendi sitemizden gönderilmesini bekliyoruz. Tarayıcılar
+ * cross-origin POST isteklerinde Origin başlığını her zaman gönderir.
+ *
+ * Karşılaştırma sabit bir alan adıyla değil isteğin kendi Host başlığıyla
+ * yapılır; böylece Vercel önizleme dağıtımları ve yerel geliştirme de çalışır.
+ */
+function isAllowedOrigin(request: Request) {
+  const origin = request.headers.get("origin");
+  // Origin yoksa istek tarayıcı kaynaklı bir cross-origin POST değildir.
+  if (!origin) return true;
+
+  let originHost: string;
+  try {
+    originHost = new URL(origin).host;
+  } catch {
+    return false;
+  }
+
+  const requestHost = request.headers.get("host");
+  const siteHost = new URL(SITE_URL).host;
+
+  return (
+    originHost === requestHost ||
+    originHost === siteHost ||
+    originHost === siteHost.replace(/^www\./, "")
+  );
+}
 
 function escapeHtml(value: string) {
   return value
@@ -103,6 +156,10 @@ function createEmailHtml({
 }
 
 export async function POST(request: Request) {
+  if (!isAllowedOrigin(request)) {
+    return NextResponse.json({ ok: false, message: "Geçersiz istek kaynağı." }, { status: 403 });
+  }
+
   const contentLength = Number(request.headers.get("content-length") || 0);
   if (contentLength > MAX_BODY_SIZE) {
     return NextResponse.json({ ok: false, message: "İstek çok büyük." }, { status: 413 });
@@ -164,6 +221,7 @@ export async function POST(request: Request) {
   const userAgent = getString(request.headers.get("user-agent"), 500);
   const rateLimitKey = ip || userAgent || "unknown-client";
   const now = Date.now();
+  pruneRecentSubmissions(now);
   const previousSubmission = recentSubmissions.get(rateLimitKey);
 
   if (previousSubmission && now - previousSubmission < RATE_LIMIT_WINDOW_MS) {
