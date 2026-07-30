@@ -35,6 +35,31 @@ export const GRADE_OPTIONS = [
   "Lise-Yetişkin",
 ];
 
+/**
+ * Sınıf düzeyine göre beklenen okuma hızı aralıkları (kelime/dakika).
+ * İdil Eğitim'in ölçüm deneyimine dayanır; evrensel bir norm tablosu
+ * olarak sunulmaz. Sonuç ekranında kaynağı böyle belirtilir.
+ */
+export const GRADE_WPM_RANGES: Record<string, { min: number; max: number }> = {
+  "1. Sınıf": { min: 30, max: 60 },
+  "2. Sınıf": { min: 60, max: 80 },
+  "3. Sınıf": { min: 80, max: 100 },
+  "4. Sınıf": { min: 100, max: 120 },
+  "5. Sınıf": { min: 120, max: 150 },
+  "6. Sınıf": { min: 120, max: 150 },
+  "7. Sınıf": { min: 150, max: 180 },
+  "8. Sınıf": { min: 150, max: 180 },
+  "Lise-Yetişkin": { min: 180, max: 230 },
+};
+
+export type RangeStatus = "altinda" | "icinde" | "uzerinde";
+
+export function getWpmStatus(wpm: number, range: { min: number; max: number }): RangeStatus {
+  if (wpm < range.min) return "altinda";
+  if (wpm > range.max) return "uzerinde";
+  return "icinde";
+}
+
 export const passages: TestPassage[] = [
   {
     id: "aricik",

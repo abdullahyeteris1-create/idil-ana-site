@@ -4,10 +4,12 @@ import { useEffect, useRef, useState } from "react";
 import Link from "next/link";
 import {
   GRADE_OPTIONS,
+  GRADE_WPM_RANGES,
   MAX_PLAUSIBLE_WPM,
   MIN_PLAUSIBLE_SECONDS,
   countWords,
   getPassageForGrade,
+  getWpmStatus,
   type TestPassage,
 } from "@/lib/reading-test";
 import { whatsappUrl } from "@/lib/contact";
@@ -278,6 +280,98 @@ export function ReadingSpeedTest() {
   );
 }
 
+const STATUS_COPY = {
+  altinda: {
+    baslik: "Beklenen aralığın altında",
+    renk: "text-[#b45309]",
+    rozet: "bg-[#fef3c7] text-[#92400e]",
+    metin:
+      "Bu, düzenli çalışmayla en hızlı ilerleme görülen gruptur. Önce okuma akıcılığı ve satır takibi çalışılır; hız, anlama korunarak kademeli artırılır.",
+  },
+  icinde: {
+    baslik: "Beklenen aralıkta",
+    renk: "text-[#0e7a72]",
+    rozet: "bg-[#d1fae5] text-[#065f46]",
+    metin:
+      "Okuma hızın sınıf düzeyi için beklenen aralıkta. Buradan sonraki hedef, anlamayı düşürmeden hızı üst banda taşımak ve dikkat süresini uzatmaktır.",
+  },
+  uzerinde: {
+    baslik: "Beklenen aralığın üzerinde",
+    renk: "text-[#0e7a72]",
+    rozet: "bg-[#d1fae5] text-[#065f46]",
+    metin:
+      "Okuma hızın sınıf düzeyinin üzerinde. Bu düzeyde çalışma genellikle anlama derinliği, not alma ve sınav metinlerinde zaman yönetimi üzerine kurulur.",
+  },
+} as const;
+
+function GradeComparison({ grade, wpm }: { grade: string; wpm: number }) {
+  const range = GRADE_WPM_RANGES[grade];
+  if (!range) return null;
+
+  const status = getWpmStatus(wpm, range);
+  const copy = STATUS_COPY[status];
+
+  // Ölçek: beklenen aralık ve kullanıcının sonucu çubuğa rahat sığsın.
+  // Uç değerlerde ölçek sınırlanır, yoksa beklenen aralık görünmez hâle gelir.
+  const scaleMax = Math.max(range.max * 1.6, Math.min(wpm * 1.1, range.max * 3));
+  const toPercent = (value: number) => Math.min((value / scaleMax) * 100, 100);
+  const bandLeft = toPercent(range.min);
+  const bandWidth = toPercent(range.max) - bandLeft;
+  const markerLeft = toPercent(wpm);
+
+  return (
+    <div className={card}>
+      <div className="flex flex-wrap items-center justify-between gap-3">
+        <h3 className="font-heading text-xl font-black sm:text-2xl">Sınıf düzeyine göre</h3>
+        <span className={`rounded-full px-3 py-1 text-sm font-extrabold ${copy.rozet}`}>
+          {copy.baslik}
+        </span>
+      </div>
+
+      <p className="mt-4 leading-7 text-black/65">
+        <strong className="text-[#12142b]">{grade}</strong> için beklenen okuma hızı{" "}
+        <strong className="text-[#12142b]">
+          {range.min}–{range.max} kelime/dakika
+        </strong>
+        . Senin ölçümün <strong className={copy.renk}>{wpm} kelime/dakika</strong>.
+      </p>
+
+      <div className="mt-8">
+        <div className="relative h-3 rounded-full bg-black/8">
+          <div
+            className="absolute inset-y-0 rounded-full bg-[#17a398]/35"
+            style={{ left: `${bandLeft}%`, width: `${bandWidth}%`, minWidth: "10px" }}
+          />
+          <div
+            className="absolute top-1/2 h-6 w-1.5 -translate-x-1/2 -translate-y-1/2 rounded-full bg-[#ff6b47]"
+            style={{ left: `${markerLeft}%` }}
+          />
+        </div>
+        <div className="relative mt-3 h-5 text-xs font-bold text-black/50">
+          <span className="absolute left-0">0</span>
+          <span
+            className="absolute -translate-x-1/2 whitespace-nowrap text-[#0e7a72]"
+            style={{ left: `${bandLeft + bandWidth / 2}%` }}
+          >
+            beklenen aralık
+          </span>
+        </div>
+        <p className="mt-3 flex items-center gap-2 text-sm font-bold text-black/60">
+          <span className="h-3 w-1.5 rounded-full bg-[#ff6b47]" aria-hidden="true" />
+          senin sonucun
+        </p>
+      </div>
+
+      <p className="mt-6 leading-7 text-black/65">{copy.metin}</p>
+      <p className="mt-4 text-sm leading-6 text-black/50">
+        Bu aralıklar İdil Eğitim&apos;in ölçüm deneyimine dayanır ve yol gösterici bir referanstır.
+        Tek bir ölçüm tanı niteliği taşımaz; okuma hızı metnin türüne, uzunluğuna ve öğrencinin o
+        anki dikkatine göre değişir.
+      </p>
+    </div>
+  );
+}
+
 function ResultView({
   result,
   passage,
@@ -313,7 +407,9 @@ function ResultView({
   const savedHoursPerYear = Math.round((savedMinutesPerDay * SCHOOL_DAYS_PER_YEAR) / 60);
   const wordsPerDay = Math.round(result.wpm * dailyMinutes);
 
-  const whatsappMessage = `Merhaba, sitenizdeki okuma hızı testini yaptım. Sonucum: dakikada ${result.wpm} kelime, anlama %${result.comprehension} (${grade}). Seviyeme uygun program hakkında bilgi almak istiyorum.`;
+  const range = GRADE_WPM_RANGES[grade];
+  const rangeNote = range ? ` Sınıf düzeyi için beklenen aralık: ${range.min}-${range.max}.` : "";
+  const whatsappMessage = `Merhaba, sitenizdeki okuma hızı testini yaptım. Sonucum: dakikada ${result.wpm} kelime, anlama %${result.comprehension} (${grade}).${rangeNote} Seviyeme uygun program hakkında bilgi almak istiyorum.`;
 
   return (
     <div className="space-y-6">
@@ -354,6 +450,8 @@ function ResultView({
           ölçüm tek bir metne dayanır; farklı metinlerde sonuç değişebilir.
         </p>
       </div>
+
+      <GradeComparison grade={grade} wpm={result.wpm} />
 
       <div className={card}>
         <h3 className="font-heading text-xl font-black sm:text-2xl">Bu hız sana ne kazandırır?</h3>
