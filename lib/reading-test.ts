@@ -32,7 +32,7 @@ export const GRADE_OPTIONS = [
   "6. Sınıf",
   "7. Sınıf",
   "8. Sınıf",
-  "Diğer",
+  "Lise-Yetişkin",
 ];
 
 export const passages: TestPassage[] = [
@@ -161,10 +161,71 @@ export const passages: TestPassage[] = [
     ],
   },
   {
+    id: "kagit",
+    title: "Kâğıdın Yolculuğu",
+    grades: ["5. Sınıf", "6. Sınıf"],
+    gradeLabel: "Ortaokul 5-6",
+    paragraphs: [
+      "Bugün not almak, kitap basmak ya da bir mektup yazmak için kâğıt kullanmak son derece sıradan görünür. Oysa kâğıt, insanlık tarihinin büyük bölümünde yoktu. Yazı yaklaşık beş bin yıl önce ortaya çıktığında insanlar kil tabletlere, taşa, ağaç kabuğuna ve hayvan derisine yazıyordu.",
+      "Bu malzemelerin hepsinin bir sorunu vardı. Kil tabletler ağırdı ve kolayca kırılırdı. Hayvan derisinden yapılan parşömen dayanıklıydı ama çok pahalıydı; tek bir kitap için onlarca hayvan gerekebiliyordu. Bu yüzden yazılı metinler uzun süre yalnızca zengin ailelerin, sarayların ve tapınakların elinde kaldı.",
+      "Kâğıdın bugünkü biçimiyle Çin'de geliştirildiği kabul edilir. Kaynaklara göre MS 105 yılında Cai Lun adlı bir saray görevlisi, ağaç kabuğu, kenevir ve eski bez parçalarını suda dövüp lif hâline getirmiş, bu lifleri ince bir elek üzerinde yayarak kurutmuştur. Ortaya çıkan malzeme hem hafif hem ucuzdu.",
+      "Çin bu yöntemi uzun süre gizli tuttu. Ancak sekizinci yüzyılda kâğıt yapımı Orta Asya'ya, oradan da Bağdat'a ulaştı. Bağdat'ta kurulan kâğıt atölyeleri, kütüphanelerin hızla büyümesini sağladı. Yüzyıllar sonra bu bilgi İspanya ve İtalya üzerinden Avrupa'ya geçti.",
+      "Kâğıdın yayılması yalnızca bir malzeme değişimi değildi. Ucuz kâğıt olmasaydı matbaanın icadı da beklenen etkiyi yaratamazdı; basılacak sayfa pahalı kaldığı sürece kitap yine az sayıda insana ulaşırdı. Kâğıt ve matbaa bir araya geldiğinde bilgi, ilk kez geniş kitlelere yayılabilecek kadar ucuzladı.",
+      "Bugün ekranlar kâğıdın yerini almaya başladı. Yine de not defterleri, sınav kâğıtları ve kitaplar hâlâ hayatımızda. Bir malzemenin bin dokuz yüz yıldır kullanılıyor olması, ne kadar iyi tasarlandığının bir göstergesi sayılabilir.",
+    ],
+    questions: [
+      {
+        question: "Metne göre parşömenin en büyük sorunu neydi?",
+        options: [
+          "Çok ağır olması",
+          "Çok pahalı olması",
+          "Kolayca yırtılması",
+          "Üzerine yazı yazılamaması",
+        ],
+        correctIndex: 1,
+      },
+      {
+        question: "Cai Lun'un yöntemi hangi malzemelere dayanıyordu?",
+        options: [
+          "Kil ve taş",
+          "Hayvan derisi ve tutkal",
+          "Ağaç kabuğu, kenevir ve eski bez parçaları",
+          "Kum ve su",
+        ],
+        correctIndex: 2,
+      },
+      {
+        question: "Kâğıt yapımı Çin'den sonra ilk olarak nereye ulaşmıştır?",
+        options: ["Doğrudan Avrupa'ya", "Orta Asya'ya", "Mısır'a", "İngiltere'ye"],
+        correctIndex: 1,
+      },
+      {
+        question: "Metne göre matbaanın etkisi neden kâğıda bağlıdır?",
+        options: [
+          "Matbaa kâğıttan yapıldığı için",
+          "Sayfa pahalı kaldıkça kitap yine az kişiye ulaşacağı için",
+          "Matbaa yalnızca kâğıda basabildiği için",
+          "Kâğıt matbaadan önce icat edildiği için",
+        ],
+        correctIndex: 1,
+      },
+      {
+        question: "Yazarın son paragraftaki temel düşüncesi nedir?",
+        options: [
+          "Kâğıt artık tamamen gereksizdir",
+          "Ekranlar kâğıttan her zaman üstündür",
+          "Uzun süre kullanılıyor olması kâğıdın iyi tasarlandığını gösterir",
+          "Kâğıt yakında tamamen ortadan kalkacaktır",
+        ],
+        correctIndex: 2,
+      },
+    ],
+  },
+  {
     id: "uyku",
     title: "Uyku ve Hafıza",
-    grades: ["5. Sınıf", "6. Sınıf", "7. Sınıf", "8. Sınıf", "Diğer"],
-    gradeLabel: "Ortaokul ve üzeri",
+    grades: ["7. Sınıf", "8. Sınıf"],
+    gradeLabel: "Ortaokul 7-8",
     paragraphs: [
       "Uzun süre uykunun yalnızca bir dinlenme hâli olduğu düşünülürdü. Bedenin yavaşladığı, zihnin ise kapandığı bir ara dönem. Son yıllarda yapılan çalışmalar bu tabloyu değiştirdi: uyku sırasında beyin sanıldığı gibi durmuyor, gün içinde toplanan bilgileri düzenliyor.",
       "Gün boyunca öğrenilenler önce geçici bir alanda tutulur. Bu alan sınırlıdır; her şeyi uzun süre saklayamaz. Uykunun derin evrelerinde beyin, bu geçici kayıtları tekrar tekrar çalıştırır ve önemli bulduklarını kalıcı bölgelere aktarır. Bir tür gece mesaisi gibi düşünülebilir: gün içinde masaya yığılan kâğıtların dosyalara yerleştirilmesi.",
@@ -223,6 +284,72 @@ export const passages: TestPassage[] = [
           "Kelime dağarcığının genişliği",
         ],
         correctIndex: 2,
+      },
+    ],
+  },
+  {
+    id: "harita",
+    title: "Haritaların Sessiz Tercihleri",
+    grades: ["Lise-Yetişkin"],
+    gradeLabel: "Lise ve yetişkin",
+    paragraphs: [
+      "Bir dünya haritasına baktığımızda çoğunlukla onu tarafsız bir belge sayarız. Oysa her harita, çözülmesi imkânsız bir problemin verilmiş bir cevabıdır. Dünya kürebiçimlidir; kürenin yüzeyi ise yırtılmadan, gerilmeden düz bir yüzeye serilemez. Bu nedenle her düz harita, gerçeği bir yerinden bozmak zorundadır. Soru bozulup bozulmayacağı değil, nerede bozulacağıdır.",
+      "En bilinen örnek, on altıncı yüzyılda Gerardus Mercator'ın hazırladığı projeksiyondur. Mercator'ın amacı estetik ya da eğitsel değildi; denizcilere hizmet etmek istiyordu. Onun haritasında sabit bir pusula yönü, harita üzerinde düz bir çizgi olarak görünür. Bir kaptan cetvelle iki liman arasına çizgi çeker ve o açıyı koruyarak yol alır. Denizcilik açısından bu, olağanüstü pratik bir çözümdü.",
+      "Ancak bu kolaylığın bir bedeli vardı. Açıları korumak için Mercator, kutuplara yaklaştıkça alanları büyütmek zorunda kaldı. Sonuç, birçoğumuzun zihnine yerleşmiş çarpık bir dünya oldu: Grönland, haritada Afrika ile neredeyse aynı büyüklükte görünür. Gerçekte Afrika, Grönland'dan yaklaşık on dört kat büyüktür. Aynı şekilde Avrupa ve Kuzey Amerika olduklarından geniş, ekvatora yakın bölgeler ise olduklarından küçük görünür.",
+      "Bu çarpıklık fark edildikçe alternatif projeksiyonlar önerildi. Bazıları alanları doğru gösterir, buna karşılık kıtaların biçimini uzatır. Bazıları biçimi korur, mesafeleri bozar. Hiçbiri diğerinden mutlak anlamda daha doğru değildir; her biri farklı bir şeyi öncelemiştir. Bir harita, hangi bilginin korunacağına dair verilmiş bir karardır ve bu karar çoğu zaman haritayı kullananın amacına bağlıdır.",
+      "Buradaki asıl mesele teknik bir ayrıntıdan ibaret değildir. Yıllarca aynı haritaya bakan bir kişi, kıtaların göreli büyüklüğüne dair sezgisini o haritadan edinir. Bir bölgenin zihnimizde kapladığı yer, çoğu zaman onu ne kadar önemli saydığımızı da etkiler. Bu yüzden hangi projeksiyonun okul kitaplarında kullanılacağı, zaman zaman teknik olduğu kadar siyasi bir tartışma hâline gelmiştir.",
+      "Harita örneği, daha genel bir duruma işaret eder. Karmaşık bir gerçekliği anlaşılır kılmak için sadeleştirme yaparız; sadeleştirme ise kaçınılmaz olarak bir şeyleri dışarıda bırakır. Grafikler, özetler, istatistikler ve modeller de aynı kuralla çalışır. Bunları kullanırken sorulması gereken soru \"doğru mu\" değil, çoğu zaman \"neyi önceliyor ve karşılığında neyi feda ediyor\" sorusudur.",
+    ],
+    questions: [
+      {
+        question: "Metne göre düz haritalar neden gerçeği bozmak zorundadır?",
+        options: [
+          "Ölçüm araçları yetersiz olduğu için",
+          "Kürenin yüzeyi bozulmadan düzleme serilemediği için",
+          "Haritacılar acele ettiği için",
+          "Dünya sürekli değiştiği için",
+        ],
+        correctIndex: 1,
+      },
+      {
+        question: "Mercator projeksiyonu hangi amaçla hazırlanmıştır?",
+        options: [
+          "Okullarda kullanılmak için",
+          "Kıtaların büyüklüğünü doğru göstermek için",
+          "Denizcilerin sabit pusula yönüyle yol almasını kolaylaştırmak için",
+          "Nüfus dağılımını göstermek için",
+        ],
+        correctIndex: 2,
+      },
+      {
+        question: "Grönland ile Afrika örneği neyi göstermek için verilmiştir?",
+        options: [
+          "Kutupların keşfedilmemiş olduğunu",
+          "Açıları korumanın alanları çarpıtmasını",
+          "Afrika'nın haritalarda gösterilmediğini",
+          "Mercator'ın hesap hatası yaptığını",
+        ],
+        correctIndex: 1,
+      },
+      {
+        question: "Alternatif projeksiyonlar hakkında metinde ne söylenir?",
+        options: [
+          "Hepsi Mercator'dan daha doğrudur",
+          "Hiçbiri kullanılmamaktadır",
+          "Her biri farklı bir şeyi önceler, mutlak üstünlük yoktur",
+          "Yalnızca alanları korurlar",
+        ],
+        correctIndex: 2,
+      },
+      {
+        question: "Yazarın son paragraftaki temel çıkarımı nedir?",
+        options: [
+          "Sadeleştirmelerin neyi önceleyip neyi feda ettiği sorulmalıdır",
+          "Grafik ve istatistiklerden kaçınılmalıdır",
+          "Haritalar artık kullanılmamalıdır",
+          "Karmaşık gerçeklik hiçbir zaman anlaşılamaz",
+        ],
+        correctIndex: 0,
       },
     ],
   },

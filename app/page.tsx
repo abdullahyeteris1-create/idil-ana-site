@@ -584,7 +584,9 @@ function RsvpDemo() {
           Öğrencilerimizin gerçek eğitim panelinden esinlenen mini bir hızlı okuma egzersizi
         </p>
         <Link href="/okuma-hizi-testi" className="rsvp-test-link">
-          Kendi okuma hızını ölç →
+          <span className="rsvp-test-badge">Ücretsiz</span>
+          Kendi okuma hızını ölç
+          <span aria-hidden="true">→</span>
         </Link>
       </div>
     </Reveal>
@@ -943,6 +945,29 @@ export default function Home() {
               *Gerçek veli değerlendirmelerinden derlenen örnek sonuçlardır, bireysel sonuçlar
               değişebilir.
             </p>
+          </div>
+        </section>
+
+        {/* ---------- OKUMA TESTİ ŞERİDİ ---------- */}
+        <section className="test-band">
+          <div className="wrap">
+            <Reveal className="test-band-inner">
+              <div className="test-band-text">
+                <div className="test-band-eyebrow">Ücretsiz · Kayıt gerekmez</div>
+                <h2 className="display">Çocuğunuz dakikada kaç kelime okuyor?</h2>
+                <p>
+                  Seviyeye uygun bir metni okuyun, okuma hızınızı ve okuduğunuzu anlama oranınızı
+                  yaklaşık üç dakikada ölçün. Sonucu hemen ekranda görün.
+                </p>
+              </div>
+              <div>
+                <Link href="/okuma-hizi-testi" className="test-band-cta">
+                  Okuma hızı testini başlat
+                  <span aria-hidden="true">→</span>
+                </Link>
+                <p className="test-band-note">1. sınıftan yetişkine kadar 5 farklı seviye</p>
+              </div>
+            </Reveal>
           </div>
         </section>
 
