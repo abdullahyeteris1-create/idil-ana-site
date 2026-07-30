@@ -605,6 +605,25 @@ html {
   margin-top: 16px;
   text-align: center;
 }
+.rsvp-test-link {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 44px;
+  margin-top: 10px;
+  border-radius: 12px;
+  background: rgba(255, 201, 60, 0.14);
+  color: var(--sun);
+  font-size: 0.85rem;
+  font-weight: 700;
+}
+.rsvp-test-link:hover {
+  background: rgba(255, 201, 60, 0.22);
+}
+.rsvp-test-link:focus-visible {
+  outline: 3px solid rgba(255, 201, 60, 0.5);
+  outline-offset: 2px;
+}
 
 .stats {
   background: var(--ink);

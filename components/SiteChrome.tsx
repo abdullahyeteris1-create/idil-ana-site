@@ -57,6 +57,7 @@ export function SiteFooter({ className = "bg-[#12142b]" }: { className?: string 
           {[
             { href: "/", label: "Ana Sayfa" },
             { href: "/hizli-okuma-egitimi", label: "Hızlı Okuma Eğitimi" },
+            { href: "/okuma-hizi-testi", label: "Okuma Hızı Testi" },
             { href: "/blog", label: "Blog" },
             { href: "/#paketler", label: "Paketler" },
             { href: "/#iletisim-formu", label: "İletişim" },

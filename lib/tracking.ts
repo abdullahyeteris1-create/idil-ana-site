@@ -45,6 +45,32 @@ export const trackWhatsAppClick = (event: React.MouseEvent<HTMLAnchorElement>) =
   trackMetaLead();
 };
 
+export const trackReadingTestStart = (grade: string) => {
+  if (typeof window === "undefined") return;
+  const gtag = (window as TrackingWindow).gtag;
+  if (typeof gtag === "function") {
+    gtag("event", "okuma_testi_basladi", { student_grade: grade });
+  }
+};
+
+export const trackReadingTestComplete = (payload: {
+  grade: string;
+  wpm: number;
+  comprehension: number;
+  effectiveWpm: number;
+}) => {
+  if (typeof window === "undefined") return;
+  const gtag = (window as TrackingWindow).gtag;
+  if (typeof gtag === "function") {
+    gtag("event", "okuma_testi_tamamlandi", {
+      student_grade: payload.grade,
+      wpm: payload.wpm,
+      comprehension_percent: payload.comprehension,
+      effective_wpm: payload.effectiveWpm,
+    });
+  }
+};
+
 export const trackContactFormSuccess = () => {
   if (typeof window === "undefined") {
     return;

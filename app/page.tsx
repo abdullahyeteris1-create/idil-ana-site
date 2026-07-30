@@ -583,6 +583,9 @@ function RsvpDemo() {
         <p className="rsvp-caption">
           Öğrencilerimizin gerçek eğitim panelinden esinlenen mini bir hızlı okuma egzersizi
         </p>
+        <Link href="/okuma-hizi-testi" className="rsvp-test-link">
+          Kendi okuma hızını ölç →
+        </Link>
       </div>
     </Reveal>
   );
@@ -818,6 +821,9 @@ export default function Home() {
           <a href="#iletisim-formu" onClick={() => setMenuOpen(false)}>
             İletişim
           </a>
+          <Link href="/okuma-hizi-testi" onClick={() => setMenuOpen(false)}>
+            Okuma Hızı Testi
+          </Link>
           <Link href="/blog" onClick={() => setMenuOpen(false)}>
             Blog
           </Link>
@@ -1550,6 +1556,7 @@ export default function Home() {
                 <a href="#surec">Eğitim Süreci</a>
                 <a href="#yorumlar">Google Yorumları</a>
                 <a href="#sss">SSS</a>
+                <Link href="/okuma-hizi-testi">Okuma Hızı Testi</Link>
                 <Link href="/blog">Blog</Link>
               </div>
               <div className="foot-col">
