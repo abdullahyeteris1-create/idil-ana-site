@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Manrope, Playfair_Display } from "next/font/google";
+import { Fraunces, JetBrains_Mono, Plus_Jakarta_Sans } from "next/font/google";
 import Script from "next/script";
 import {
   DEFAULT_DESCRIPTION,
@@ -14,15 +14,33 @@ import "./globals.css";
 const META_PIXEL_ID = "2057696181799169";
 const GOOGLE_ANALYTICS_ID = "G-9GVF5KH9CJ";
 
-const manrope = Manrope({
-  subsets: ["latin"],
-  variable: "--font-manrope",
+// Türkçe karakterler (ğ, ş, İ, ı) latin-ext alt kümesinde yer alır.
+const fraunces = Fraunces({
+  subsets: ["latin", "latin-ext"],
+  variable: "--font-fraunces",
   display: "swap",
 });
 
-const playfair = Playfair_Display({
+// Italic yalnızca hero başlığındaki vurguda kullanılıyor; preload edilmesi
+// kritik yolu gereksiz büyütür, bu yüzden ayrı ve preload'suz tanımlanır.
+const frauncesItalic = Fraunces({
+  subsets: ["latin", "latin-ext"],
+  style: ["italic"],
+  variable: "--font-fraunces-italic",
+  display: "swap",
+  preload: false,
+});
+
+const jakarta = Plus_Jakarta_Sans({
+  subsets: ["latin", "latin-ext"],
+  variable: "--font-jakarta",
+  display: "swap",
+});
+
+// Yalnızca rakamlar ve kısa etiketler için kullanılıyor, latin-ext gerekmiyor.
+const jetbrainsMono = JetBrains_Mono({
   subsets: ["latin"],
-  variable: "--font-playfair",
+  variable: "--font-jetbrains-mono",
   display: "swap",
 });
 
@@ -87,10 +105,13 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="tr-TR" className="h-full antialiased">
-      <body
-        className={`${manrope.variable} ${playfair.variable} min-h-full bg-white antialiased`}
-      >
+    // Font değişkenleri :root üzerinde tanımlanmalı; globals.css'teki
+    // --font-heading/--font-body takma adları :root seviyesinde çözülüyor.
+    <html
+      lang="tr-TR"
+      className={`${jakarta.variable} ${fraunces.variable} ${frauncesItalic.variable} ${jetbrainsMono.variable} h-full antialiased`}
+    >
+      <body className="min-h-full bg-white antialiased">
         <Script
           id="google-analytics"
           src={`https://www.googletagmanager.com/gtag/js?id=${GOOGLE_ANALYTICS_ID}`}

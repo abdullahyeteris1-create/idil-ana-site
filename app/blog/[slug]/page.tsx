@@ -3,15 +3,13 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import { BlogArticle } from "@/components/blog/BlogArticle";
 import { BlogCard } from "@/components/blog/BlogCard";
+import { WhatsAppLink } from "@/components/WhatsAppLink";
 import { blogPosts, getBlogPost, getRelatedBlogPosts } from "@/lib/blog";
 import { LOGO_PATH, SITE_NAME, absoluteUrl } from "@/lib/seo";
 
 type BlogPostPageProps = {
   params: Promise<{ slug: string }>;
 };
-
-const WHATSAPP_URL =
-  "https://wa.me/905462396786?text=Merhaba,%20h%C4%B1zl%C4%B1%20okuma%20e%C4%9Fitimi%20hakk%C4%B1nda%20bilgi%20almak%20istiyorum.";
 
 export const dynamicParams = false;
 
@@ -190,14 +188,9 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
               >
                 Eğitim Paketlerini İncele
               </Link>
-              <a
-                href={WHATSAPP_URL}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="inline-flex min-h-12 items-center justify-center rounded-full border border-white/35 px-6 py-3 font-extrabold text-white transition hover:border-white hover:bg-white/10 focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-white"
-              >
+              <WhatsAppLink className="inline-flex min-h-12 items-center justify-center rounded-full border border-white/35 px-6 py-3 font-extrabold text-white transition hover:border-white hover:bg-white/10 focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-white">
                 WhatsApp&apos;tan Bilgi Al
-              </a>
+              </WhatsAppLink>
             </div>
           </div>
         </section>
