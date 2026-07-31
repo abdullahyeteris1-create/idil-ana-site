@@ -19,41 +19,45 @@ html {
 }
 /* Bu dosya global bir stylesheet olduğu ve istemci tarafı gezinmede kaldırılmadığı
    için, element seçicileri .home kapsamına alınır; aksi halde ana sayfadan bloga
-   geçildiğinde blog başlığı/listeleri bu kurallardan etkilenir. */
+   geçildiğinde blog başlığı/listeleri bu kurallardan etkilenir.
+
+   Kapsam :where() ile veriliyor: :where() özgüllüğe katkı yapmaz, böylece
+   ".home a" gibi bir seçici (0,1,1) olup ".hero-link" gibi sınıf kurallarını
+   ezmez. Düz "a { }" yazılmış hâliyle aynı cascade davranışı korunur. */
 .home {
   background: var(--cream);
   color: var(--ink);
   overflow-x: hidden;
   -webkit-font-smoothing: antialiased;
 }
-.home img {
+:where(.home) img {
   max-width: 100%;
   display: block;
 }
-.home a {
+:where(.home) a {
   color: inherit;
   text-decoration: none;
 }
-.home ul {
+:where(.home) ul {
   list-style: none;
   margin: 0;
   padding: 0;
 }
-.home .display {
+:where(.home) .display {
   font-family: var(--font-heading), Georgia, serif;
 }
-.home .mono {
+:where(.home) .mono {
   font-family: var(--font-mono), ui-monospace, monospace;
 }
-.home .wrap {
+:where(.home) .wrap {
   max-width: 1180px;
   margin: 0 auto;
   padding: 0 32px;
 }
-.home section {
+:where(.home) section {
   position: relative;
 }
-.home ::selection {
+:where(.home) ::selection {
   background: var(--coral);
   color: #fff;
 }
@@ -1777,7 +1781,7 @@ html {
   box-shadow: 0 14px 30px -8px rgba(0, 0, 0, 0.4);
 }
 
-.home footer {
+:where(.home) footer {
   background: var(--ink);
   color: var(--cream);
   padding: 64px 0 32px;
