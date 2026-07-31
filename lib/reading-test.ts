@@ -60,6 +60,86 @@ export function getWpmStatus(wpm: number, range: { min: number; max: number }): 
   return "icinde";
 }
 
+/**
+ * Anlama oranının yeterli sayıldığı eşik. Test 5 sorudan oluştuğu için
+ * pratikte 4 veya 5 doğru yeterli, 3 ve altı gelişim alanı demektir.
+ */
+export const COMPREHENSION_THRESHOLD = 80;
+
+export type AssessmentTone = "olumlu" | "gelisim" | "dikkat";
+
+export type Assessment = {
+  tone: AssessmentTone;
+  title: string;
+  text: string;
+  /** WhatsApp mesajına ve GA4 olayına giden kısa etiket. */
+  shortLabel: string;
+};
+
+/**
+ * Değerlendirme iki eksene birlikte bakar. Hız beklenen aralıkta olsa bile
+ * anlama eşiğin altındaysa sonuç olumlu sayılmaz: metni gözle takip edip
+ * içeriği işlememek, yavaş okumaktan daha az sorunlu değildir.
+ */
+export function getAssessment(
+  wpm: number,
+  comprehension: number,
+  range: { min: number; max: number },
+): Assessment {
+  const speed = getWpmStatus(wpm, range);
+  const comprehensionOk = comprehension >= COMPREHENSION_THRESHOLD;
+
+  if (!comprehensionOk) {
+    if (speed === "altinda") {
+      return {
+        tone: "gelisim",
+        title: "Hem hız hem anlama desteklenmeli",
+        shortLabel: "Hız ve anlama birlikte desteklenmeli",
+        text: `Okuma hızı sınıf düzeyinin altında ve anlama oranı %${comprehension}. Bu tabloda öncelik anlamadır; metin doğru anlaşılmadan hız artırmak kalıcı kazanç sağlamaz. Çalışma kelime tanıma, satır takibi ve anlama stratejileriyle başlar, hız bunların üzerine kademeli eklenir.`,
+      };
+    }
+    if (speed === "icinde") {
+      return {
+        tone: "dikkat",
+        title: "Hız yeterli, ancak okuduğunu anlamada eksik var",
+        shortLabel: "Hız yeterli, anlamada eksik",
+        text: `Okuma hızı sınıf düzeyi için beklenen aralıkta olsa da anlama oranı %${comprehension}. Bu, metnin gözle takip edildiğini ancak içeriğin yeterince işlenmediğini gösterir. Bu durumda hızı artırmak sorunu büyütür; önce okuma amacı belirleme, paragraf özetleme ve anlama kontrollü metin çalışmaları yapılmalıdır.`,
+      };
+    }
+    return {
+      tone: "dikkat",
+      title: "Hızlı okunuyor, ancak anlama düşük",
+      shortLabel: "Hızlı ama anlamadan okuma",
+      text: `Okuma hızı sınıf düzeyinin üzerinde, buna karşılık anlama oranı %${comprehension}. Bu, metnin üzerinden hızla geçilip içeriğin yeterince işlenmediğine işaret eder. Hız tek başına bir kazanım değildir; bu tabloda çalışma anlama üzerine kurulur ve hız bir süre bilinçli olarak yavaşlatılabilir.`,
+    };
+  }
+
+  if (speed === "altinda") {
+    return {
+      tone: "gelisim",
+      title: "Anlama güçlü, hız geliştirilmeli",
+      shortLabel: "Anlama iyi, hız düşük",
+      text: `Anlama oranı %${comprehension} ile yeterli düzeyde; asıl gelişim alanı okuma hızı. Göz takibi, kelime grubu okuma ve odak çalışmalarıyla hız, anlama korunarak artırılabilir. Anlamanın güçlü olması bu süreci kolaylaştırır.`,
+    };
+  }
+
+  if (speed === "icinde") {
+    return {
+      tone: "olumlu",
+      title: "Dengeli bir sonuç",
+      shortLabel: "Hız ve anlama dengeli",
+      text: `Hem okuma hızı hem anlama oranı sınıf düzeyi için beklenen seviyede. Buradan sonraki hedef, anlamayı düşürmeden hızı üst banda taşımak ve dikkat süresini daha uzun metinlerde korumaktır.`,
+    };
+  }
+
+  return {
+    tone: "olumlu",
+    title: "Güçlü bir sonuç",
+    shortLabel: "Hız ve anlama güçlü",
+    text: `Okuma hızı sınıf düzeyinin üzerinde ve anlama oranı %${comprehension}. Bu düzeyde çalışma genellikle anlama derinliği, not alma ve sınav metinlerinde zaman yönetimi üzerine kurulur.`,
+  };
+}
+
 export const passages: TestPassage[] = [
   {
     id: "aricik",
