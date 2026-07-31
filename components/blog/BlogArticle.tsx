@@ -1,48 +1,61 @@
 import Image from "next/image";
-import type { BlogContentBlock, BlogPost } from "@/lib/blog";
+import Link from "next/link";
+import { MDXRemote } from "next-mdx-remote/rsc";
+import type { MDXComponents } from "mdx/types";
+import type { BlogPost } from "@/lib/blog";
 import { formatBlogDate } from "@/lib/blog";
 
-function ContentBlock({ block }: { block: BlogContentBlock }) {
-  switch (block.type) {
-    case "heading":
-      return (
-        <h2 className="font-heading mt-12 text-2xl font-black leading-tight tracking-[-0.02em] text-[#12142b] sm:text-3xl">
-          {block.text}
-        </h2>
-      );
-    case "list": {
-      const List = block.ordered ? "ol" : "ul";
-      return (
-        <List
-          className={`my-6 space-y-3 pl-6 leading-8 text-black/70 ${
-            block.ordered ? "list-decimal" : "list-disc marker:text-[#17a398]"
-          }`}
-        >
-          {block.items.map((item) => (
-            <li key={item} className="pl-1">
-              {item}
-            </li>
-          ))}
-        </List>
-      );
+/**
+ * MDX içeriğinin HTML etiketleri, sitenin tipografisiyle eşleşen
+ * bileşenlere haritalanır. Yazar sade markdown yazar, görünüm buradan gelir.
+ */
+const mdxComponents: MDXComponents = {
+  h2: (props) => (
+    <h2
+      className="font-heading mt-12 text-2xl font-black leading-tight tracking-[-0.02em] text-[#12142b] sm:text-3xl"
+      {...props}
+    />
+  ),
+  h3: (props) => (
+    <h3 className="font-heading mt-9 text-xl font-black leading-tight text-[#12142b]" {...props} />
+  ),
+  p: (props) => <p className="mt-5 text-[1.04rem] leading-8 text-black/70" {...props} />,
+  ul: (props) => (
+    <ul
+      className="my-6 list-disc space-y-3 pl-6 leading-8 text-black/70 marker:text-[#17a398]"
+      {...props}
+    />
+  ),
+  ol: (props) => <ol className="my-6 list-decimal space-y-3 pl-6 leading-8 text-black/70" {...props} />,
+  li: (props) => <li className="pl-1" {...props} />,
+  blockquote: (props) => (
+    <blockquote
+      className="my-8 border-l-4 border-[#ff6b47] bg-[#fff4ef] px-6 py-5 font-heading text-xl leading-8 text-[#12142b] [&>p]:mt-0"
+      {...props}
+    />
+  ),
+  strong: (props) => <strong className="font-bold text-[#12142b]" {...props} />,
+  a: ({ href = "", ...props }) => {
+    const isInternal = href.startsWith("/") || href.startsWith("#");
+    const className =
+      "font-bold text-[#0e7a72] underline underline-offset-4 transition-colors hover:text-[#e8502a]";
+
+    if (isInternal) {
+      return <Link href={href} className={className} {...props} />;
     }
-    case "quote":
-      return (
-        <blockquote className="my-8 border-l-4 border-[#ff6b47] bg-[#fff4ef] px-6 py-5 font-heading text-xl leading-8 text-[#12142b]">
-          {block.text}
-        </blockquote>
-      );
-    case "callout":
-      return (
-        <aside className="my-8 rounded-2xl border border-[#17a398]/25 bg-[#edf9f7] p-6">
-          <h3 className="font-heading text-lg font-black text-[#0e7a72]">{block.title}</h3>
-          <p className="mt-2 leading-7 text-black/70">{block.text}</p>
-        </aside>
-      );
-    case "paragraph":
-      return <p className="mt-5 text-[1.04rem] leading-8 text-black/70">{block.text}</p>;
-  }
-}
+    return (
+      <a href={href} className={className} target="_blank" rel="noopener noreferrer" {...props} />
+    );
+  },
+  hr: () => <hr className="my-10 border-black/10" />,
+  // Yazı içinde <Callout title="...">metin</Callout> olarak kullanılır.
+  Callout: ({ title, children }: { title?: string; children?: React.ReactNode }) => (
+    <aside className="my-8 rounded-2xl border border-[#17a398]/25 bg-[#edf9f7] p-6">
+      {title && <h3 className="font-heading text-lg font-black text-[#0e7a72]">{title}</h3>}
+      <div className="mt-2 leading-7 text-black/70 [&>p]:mt-0">{children}</div>
+    </aside>
+  ),
+};
 
 export function BlogArticle({ post }: { post: BlogPost }) {
   return (
@@ -80,9 +93,7 @@ export function BlogArticle({ post }: { post: BlogPost }) {
       </div>
 
       <div className="mx-auto mt-12 max-w-3xl sm:mt-16">
-        {post.content.map((block, index) => (
-          <ContentBlock block={block} key={`${block.type}-${index}`} />
-        ))}
+        <MDXRemote source={post.content} components={mdxComponents} />
 
         <div className="mt-14 flex items-center gap-4 border-t border-black/10 pt-8">
           <div
