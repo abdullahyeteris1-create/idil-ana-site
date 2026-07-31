@@ -329,11 +329,12 @@ const rsvpText =
   "Daha hızlı oku daha doğru anla İdil Hızlı Okuma okuma hızını anlama becerisini dikkat ve odaklanmayı birlikte geliştirir her öğrenci kendi seviyesinden başlar";
 const rsvpWords = rsvpText.split(" ");
 
+// Sıra sayfadaki bölüm sırasıyla aynı olmalı.
 const navLinks = [
+  { href: "#yorumlar", label: "Yorumlar" },
   { href: "#gruplar", label: "Eğitim Grupları" },
   { href: "#paketler", label: "Paketler" },
   { href: "#surec", label: "Eğitim Süreci" },
-  { href: "#yorumlar", label: "Yorumlar" },
   { href: "#sss", label: "SSS" },
 ];
 
@@ -975,6 +976,115 @@ export default function Home() {
           </div>
         </section>
 
+        {/* ---------- REVIEWS ---------- */}
+        <section className="reviews" id="yorumlar">
+          <div className="wrap">
+            <Reveal className="sec-head">
+              <div className="sec-eyebrow">Google Yorumları</div>
+              <h2 className="display">Velilerimiz ne diyor?</h2>
+              <p>Velilerimizin Google üzerinden paylaştığı gerçek değerlendirmelerden bazıları.</p>
+              <a
+                className="google-rating"
+                href={GOOGLE_REVIEWS_URL}
+                target="_blank"
+                rel="noopener noreferrer"
+                aria-label={`Google'da ${GOOGLE_REVIEW_COUNT} değerlendirme, ${GOOGLE_RATING} ortalama. Google işletme sayfasını aç.`}
+              >
+                <span className="google-rating-score">{GOOGLE_RATING}</span>
+                <span className="google-rating-stars" aria-hidden="true">
+                  ★★★★★
+                </span>
+                <span className="google-rating-count">
+                  {`Google'da ${GOOGLE_REVIEW_COUNT} değerlendirme`}
+                </span>
+              </a>
+            </Reveal>
+          </div>
+          <div className="review-track-wrap">
+            <div className="review-track">
+              {[...reviews, ...reviews].map((r, i) => {
+                const isLong = r.text.length > REVIEW_CLAMP_LENGTH;
+                return (
+                  <div className="review-card" key={i}>
+                    <div className="stars">★★★★★</div>
+                    <p>{r.text}</p>
+                    {/* Eskiden genel bir Google aramasına giden ölü bir bağlantıydı;
+                        artık yorumun tamamını yerinde açıyor. */}
+                    {isLong && (
+                      <button
+                        type="button"
+                        className="review-more"
+                        onClick={() => setOpenReview(r)}
+                        aria-label={`${r.name} yorumunun tamamını oku`}
+                      >
+                        Devamını oku →
+                      </button>
+                    )}
+                    <div className="review-who">
+                      <div className="review-avatar">{getInitials(r.name)}</div>
+                      <div>
+                        <strong>{r.name}</strong>
+                        <span>Google üzerinden paylaşıldı</span>
+                      </div>
+                    </div>
+                  </div>
+                );
+              })}
+            </div>
+          </div>
+          <div className="wrap" style={{ marginTop: 34 }}>
+            <a
+              href={GOOGLE_REVIEWS_URL}
+              className="hero-link"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              {`${GOOGLE_REVIEW_COUNT} değerlendirmenin tamamını Google'da gör →`}
+            </a>
+          </div>
+
+          <dialog
+            ref={reviewDialogRef}
+            className="review-dialog"
+            aria-labelledby="review-dialog-title"
+            onClose={() => setOpenReview(null)}
+            onClick={(event) => {
+              // Pencerenin dışına (backdrop) tıklandığında kapat.
+              if (event.target === reviewDialogRef.current) setOpenReview(null);
+            }}
+          >
+            {openReview && (
+              <div className="review-dialog-inner">
+                <button
+                  type="button"
+                  className="review-dialog-close"
+                  onClick={() => setOpenReview(null)}
+                  aria-label="Yorumu kapat"
+                >
+                  ×
+                </button>
+                <div className="stars">★★★★★</div>
+                <p className="review-dialog-text">{openReview.text}</p>
+                <div className="review-who">
+                  <div className="review-avatar">{getInitials(openReview.name)}</div>
+                  <div>
+                    <strong id="review-dialog-title">{openReview.name}</strong>
+                    <span>Google üzerinden paylaşıldı</span>
+                  </div>
+                </div>
+                <a
+                  className="review-dialog-source"
+                  href={GOOGLE_REVIEWS_URL}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  Bu yorumları Google&apos;da gör →
+                </a>
+              </div>
+            )}
+          </dialog>
+        </section>
+
         {/* ---------- APPROACH ---------- */}
         <section className="approach" id="yontem">
           <div className="wrap">
@@ -1209,114 +1319,6 @@ export default function Home() {
           </div>
         </section>
 
-        {/* ---------- REVIEWS ---------- */}
-        <section className="reviews" id="yorumlar">
-          <div className="wrap">
-            <Reveal className="sec-head">
-              <div className="sec-eyebrow">Google Yorumları</div>
-              <h2 className="display">Velilerimiz ne diyor?</h2>
-              <p>Velilerimizin Google üzerinden paylaştığı gerçek değerlendirmelerden bazıları.</p>
-              <a
-                className="google-rating"
-                href={GOOGLE_REVIEWS_URL}
-                target="_blank"
-                rel="noopener noreferrer"
-                aria-label={`Google'da ${GOOGLE_REVIEW_COUNT} değerlendirme, ${GOOGLE_RATING} ortalama. Google işletme sayfasını aç.`}
-              >
-                <span className="google-rating-score">{GOOGLE_RATING}</span>
-                <span className="google-rating-stars" aria-hidden="true">
-                  ★★★★★
-                </span>
-                <span className="google-rating-count">
-                  {`Google'da ${GOOGLE_REVIEW_COUNT} değerlendirme`}
-                </span>
-              </a>
-            </Reveal>
-          </div>
-          <div className="review-track-wrap">
-            <div className="review-track">
-              {[...reviews, ...reviews].map((r, i) => {
-                const isLong = r.text.length > REVIEW_CLAMP_LENGTH;
-                return (
-                  <div className="review-card" key={i}>
-                    <div className="stars">★★★★★</div>
-                    <p>{r.text}</p>
-                    {/* Eskiden genel bir Google aramasına giden ölü bir bağlantıydı;
-                        artık yorumun tamamını yerinde açıyor. */}
-                    {isLong && (
-                      <button
-                        type="button"
-                        className="review-more"
-                        onClick={() => setOpenReview(r)}
-                        aria-label={`${r.name} yorumunun tamamını oku`}
-                      >
-                        Devamını oku →
-                      </button>
-                    )}
-                    <div className="review-who">
-                      <div className="review-avatar">{getInitials(r.name)}</div>
-                      <div>
-                        <strong>{r.name}</strong>
-                        <span>Google üzerinden paylaşıldı</span>
-                      </div>
-                    </div>
-                  </div>
-                );
-              })}
-            </div>
-          </div>
-          <div className="wrap" style={{ marginTop: 34 }}>
-            <a
-              href={GOOGLE_REVIEWS_URL}
-              className="hero-link"
-              target="_blank"
-              rel="noopener noreferrer"
-            >
-              {`${GOOGLE_REVIEW_COUNT} değerlendirmenin tamamını Google'da gör →`}
-            </a>
-          </div>
-
-          <dialog
-            ref={reviewDialogRef}
-            className="review-dialog"
-            aria-labelledby="review-dialog-title"
-            onClose={() => setOpenReview(null)}
-            onClick={(event) => {
-              // Pencerenin dışına (backdrop) tıklandığında kapat.
-              if (event.target === reviewDialogRef.current) setOpenReview(null);
-            }}
-          >
-            {openReview && (
-              <div className="review-dialog-inner">
-                <button
-                  type="button"
-                  className="review-dialog-close"
-                  onClick={() => setOpenReview(null)}
-                  aria-label="Yorumu kapat"
-                >
-                  ×
-                </button>
-                <div className="stars">★★★★★</div>
-                <p className="review-dialog-text">{openReview.text}</p>
-                <div className="review-who">
-                  <div className="review-avatar">{getInitials(openReview.name)}</div>
-                  <div>
-                    <strong id="review-dialog-title">{openReview.name}</strong>
-                    <span>Google üzerinden paylaşıldı</span>
-                  </div>
-                </div>
-                <a
-                  className="review-dialog-source"
-                  href={GOOGLE_REVIEWS_URL}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                >
-                  Bu yorumları Google&apos;da gör →
-                </a>
-              </div>
-            )}
-          </dialog>
-        </section>
 
         {/* ---------- CTA ---------- */}
         <section className="cta">
@@ -1604,9 +1606,9 @@ export default function Home() {
             <div className="foot-links">
               <div className="foot-col">
                 <h4>Site</h4>
+                <a href="#yorumlar">Google Yorumları</a>
                 <a href="#gruplar">Eğitim Grupları</a>
                 <a href="#surec">Eğitim Süreci</a>
-                <a href="#yorumlar">Google Yorumları</a>
                 <a href="#sss">SSS</a>
                 <Link href="/okuma-hizi-testi">Okuma Hızı Testi</Link>
                 <Link href="/blog">Blog</Link>
