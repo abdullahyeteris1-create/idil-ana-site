@@ -731,37 +731,6 @@ html {
   color: rgba(251, 247, 240, 0.5);
 }
 
-.stats {
-  background: var(--ink);
-  color: var(--cream);
-  padding: 56px 0;
-}
-.stats-grid {
-  display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  gap: 0;
-}
-.stat {
-  text-align: center;
-  padding: 0 20px;
-  border-left: 1px solid var(--line-dark);
-}
-.stat:first-child {
-  border-left: none;
-}
-.stat-num {
-  font-family: var(--font-mono), ui-monospace, monospace;
-  font-size: clamp(1.8rem, 3vw, 2.6rem);
-  font-weight: 700;
-  color: var(--sun);
-  line-height: 1;
-}
-.stat-label {
-  font-size: 0.82rem;
-  color: rgba(251, 247, 240, 0.6);
-  margin-top: 10px;
-}
-
 .sec-head {
   max-width: 640px;
   margin-bottom: 52px;
@@ -858,7 +827,8 @@ html {
 }
 
 .video-section {
-  padding: 0 0 100px;
+  /* Hero'nun hemen ardından geliyor; araya biraz nefes payı bırakılır. */
+  padding: 24px 0 100px;
 }
 .video-head {
   margin-left: auto;
@@ -1907,13 +1877,6 @@ html {
     grid-template-columns: 1fr;
     gap: 52px;
   }
-  .stats-grid {
-    grid-template-columns: repeat(2, 1fr);
-    row-gap: 28px;
-  }
-  .stat:nth-child(3) {
-    border-left: none;
-  }
   .group-cards {
     grid-template-columns: repeat(3, 1fr);
   }
@@ -2046,21 +2009,6 @@ html {
   }
   .review-card {
     width: 300px;
-  }
-  /* Tek sütunda bölüm gereksiz uzuyordu; 2x2 daha dengeli duruyor. */
-  .stats-grid {
-    grid-template-columns: repeat(2, 1fr);
-    gap: 26px 0;
-  }
-  .stat {
-    padding: 0 12px;
-    border-left: 1px solid var(--line-dark);
-  }
-  .stat:nth-child(odd) {
-    border-left: none;
-  }
-  .stat-label {
-    font-size: 0.76rem;
   }
   .test-band {
     padding-bottom: 70px;

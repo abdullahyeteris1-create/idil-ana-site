@@ -516,40 +516,6 @@ function Reveal({
 }
 
 /* =========================================================
-   SAYAÇ (istatistik) BİLEŞENİ
-   ========================================================= */
-
-function Counter({ to, suffix = "" }: { to: number; suffix?: string }) {
-  const ref = useRef<HTMLSpanElement>(null);
-  const inView = useInView(ref, { once: true, amount: 0.6 });
-  const reduceMotion = useReducedMotion();
-  const [value, setValue] = useState(0);
-
-  useEffect(() => {
-    // Hareket azaltma tercihinde sayaç hiç animasyonlanmaz, son değer gösterilir.
-    if (!inView || reduceMotion) return;
-    const duration = 1400;
-    const start = performance.now();
-    let raf = 0;
-    function tick(t: number) {
-      const p = Math.min((t - start) / duration, 1);
-      const eased = 1 - Math.pow(1 - p, 3);
-      setValue(Math.floor(eased * to));
-      if (p < 1) raf = requestAnimationFrame(tick);
-    }
-    raf = requestAnimationFrame(tick);
-    return () => cancelAnimationFrame(raf);
-  }, [inView, to, reduceMotion]);
-
-  return (
-    <span ref={ref} className="mono">
-      {reduceMotion ? to : value}
-      {suffix}
-    </span>
-  );
-}
-
-/* =========================================================
    RSVP HIZLI OKUMA DEMOSU
    ========================================================= */
 
@@ -940,37 +906,25 @@ export default function Home() {
           </div>
         </section>
 
-        {/* ---------- STATS ---------- */}
-        <section className="stats">
-          <div className="wrap stats-grid">
-            <Reveal className="stat">
-              <div className="stat-num">
-                <Counter to={190} />
-              </div>
-              <div className="stat-label">kelime/dk&apos;ya çıkan öğrenci hızı*</div>
-            </Reveal>
-            <Reveal className="stat">
-              <div className="stat-num">
-                <Counter to={100} suffix="%" />
-              </div>
-              <div className="stat-label">bazı öğrencilerde okuma hızı artışı*</div>
-            </Reveal>
-            <Reveal className="stat">
-              <div className="stat-num mono">1:1</div>
-              <div className="stat-label">özel, takipli online ders yapısı</div>
-            </Reveal>
-            <Reveal className="stat">
-              <div className="stat-num">
-                <Counter to={5} />
-              </div>
-              <div className="stat-label">yaş grubuna göre planlanan program</div>
-            </Reveal>
-          </div>
+
+        {/* ---------- TANITIM VİDEOSU ---------- */}
+        <section className="video-section" id="tanitim-videosu">
           <div className="wrap">
-            <p style={{ fontSize: ".72rem", color: "rgba(251,247,240,0.35)", marginTop: 24 }}>
-              *Gerçek veli değerlendirmelerinden derlenen örnek sonuçlardır, bireysel sonuçlar
-              değişebilir.
-            </p>
+            <Reveal className="sec-head video-head">
+              <div className="sec-eyebrow">Tanıtım Filmi</div>
+              <h2 className="display">Platformu bir dakikada tanıyın</h2>
+              <p>
+                Öğrencilerin çalıştığı egzersizler, ölçüm ekranları ve veliye sunulan gelişim
+                raporu — hepsi kısa bir turda.
+              </p>
+            </Reveal>
+            <Reveal className="video-wrap">
+              <VideoPlayer
+                src={VIDEO_SRC}
+                poster={VIDEO_POSTER}
+                label="İdil Hızlı Okuma platform tanıtım videosu"
+              />
+            </Reveal>
           </div>
         </section>
 
@@ -1157,26 +1111,6 @@ export default function Home() {
           </div>
         </section>
 
-        {/* ---------- TANITIM VİDEOSU ---------- */}
-        <section className="video-section" id="tanitim-videosu">
-          <div className="wrap">
-            <Reveal className="sec-head video-head">
-              <div className="sec-eyebrow">Tanıtım Filmi</div>
-              <h2 className="display">Platformu bir dakikada tanıyın</h2>
-              <p>
-                Öğrencilerin çalıştığı egzersizler, ölçüm ekranları ve veliye sunulan gelişim
-                raporu — hepsi kısa bir turda.
-              </p>
-            </Reveal>
-            <Reveal className="video-wrap">
-              <VideoPlayer
-                src={VIDEO_SRC}
-                poster={VIDEO_POSTER}
-                label="İdil Hızlı Okuma platform tanıtım videosu"
-              />
-            </Reveal>
-          </div>
-        </section>
 
         {/* ---------- GROUPS ---------- */}
         <section className="groups" id="gruplar">
