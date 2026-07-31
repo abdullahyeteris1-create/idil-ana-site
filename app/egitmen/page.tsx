@@ -100,15 +100,17 @@ export default function EgitmenPage() {
       <main className="overflow-x-hidden bg-[#fbf7f0] text-[#12142b]">
         {/* ---------- TANITIM ---------- */}
         <section className="px-5 pb-16 pt-14 sm:px-8 sm:pb-20 sm:pt-20">
-          <div className="mx-auto grid max-w-5xl items-center gap-10 md:grid-cols-[320px_1fr] md:gap-14">
-            <div className="mx-auto w-full max-w-[320px]">
-              <div className="relative aspect-[4/5] overflow-hidden rounded-[28px] border border-black/10 bg-[#eaf4f3] shadow-[0_28px_70px_-38px_rgba(18,20,43,0.55)]">
+          <div className="mx-auto grid max-w-5xl items-center gap-10 md:grid-cols-[300px_1fr] md:gap-14">
+            {/* Portre dairesel maskeyle üretildi; çerçeve de dairesel olunca
+                kenarlar birebir hizalanıyor. */}
+            <div className="mx-auto w-full max-w-[300px]">
+              <div className="relative aspect-square overflow-hidden rounded-full ring-1 ring-black/10 shadow-[0_28px_70px_-38px_rgba(18,20,43,0.55)]">
                 <Image
                   src={PHOTO}
                   alt={`${INSTRUCTOR_NAME}, İdil Hızlı Okuma eğitmeni`}
                   fill
                   priority
-                  sizes="(max-width: 768px) 320px, 320px"
+                  sizes="300px"
                   className="object-cover"
                 />
               </div>
