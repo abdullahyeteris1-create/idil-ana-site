@@ -2,7 +2,9 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import Image from "next/image";
 import { SiteFooter, SiteHeader } from "@/components/SiteChrome";
+import { VideoPlayer } from "@/components/VideoPlayer";
 import { WhatsAppLink } from "@/components/WhatsAppLink";
+import { VIDEO_POSTER, VIDEO_SRC } from "@/lib/video";
 import { SITE_NAME, absoluteUrl, createPageMetadata } from "@/lib/seo";
 
 const description =
@@ -265,6 +267,24 @@ export default function HizliOkumaEgitimiPage() {
             >
               Tüm eğitim gruplarını inceleyin →
             </Link>
+          </div>
+        </section>
+
+        {/* ---------- TANITIM VİDEOSU ---------- */}
+        <section className="px-5 py-16 sm:px-8 sm:py-24" aria-labelledby="video-title">
+          <div className="mx-auto max-w-4xl">
+            <h2 id="video-title" className="font-heading text-3xl font-black sm:text-4xl">
+              Platformu bir dakikada tanıyın
+            </h2>
+            <p className="mt-4 leading-8 text-black/65">
+              Öğrencilerin çalıştığı egzersizler, ölçüm ekranları ve veliye sunulan gelişim raporu.
+            </p>
+            <VideoPlayer
+              src={VIDEO_SRC}
+              poster={VIDEO_POSTER}
+              label="İdil Hızlı Okuma platform tanıtım videosu"
+              className="mt-8"
+            />
           </div>
         </section>
 

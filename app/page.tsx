@@ -28,6 +28,15 @@ import {
 } from "@/lib/contact";
 import { trackContactFormSuccess, trackWhatsAppClick } from "@/lib/tracking";
 import { CookiePreferencesButton } from "@/components/CookieConsent";
+import { VideoPlayer } from "@/components/VideoPlayer";
+import {
+  VIDEO_DESCRIPTION,
+  VIDEO_DURATION_ISO,
+  VIDEO_POSTER,
+  VIDEO_SRC,
+  VIDEO_TITLE,
+  VIDEO_UPLOAD_DATE,
+} from "@/lib/video";
 import "./home.css";
 
 /* =========================================================
@@ -432,6 +441,18 @@ const homeJsonLd = {
         inLanguage: "tr-TR",
       },
       offers: packageOffersJsonLd,
+    },
+    {
+      "@type": "VideoObject",
+      "@id": `${SITE_URL}/#tanitim-videosu`,
+      name: VIDEO_TITLE,
+      description: VIDEO_DESCRIPTION,
+      thumbnailUrl: absoluteUrl(VIDEO_POSTER),
+      contentUrl: absoluteUrl(VIDEO_SRC),
+      uploadDate: VIDEO_UPLOAD_DATE,
+      duration: VIDEO_DURATION_ISO,
+      inLanguage: "tr-TR",
+      publisher: { "@id": `${SITE_URL}/#organization` },
     },
     {
       "@type": "FAQPage",
@@ -1133,6 +1154,27 @@ export default function Home() {
                 </Reveal>
               ))}
             </div>
+          </div>
+        </section>
+
+        {/* ---------- TANITIM VİDEOSU ---------- */}
+        <section className="video-section" id="tanitim-videosu">
+          <div className="wrap">
+            <Reveal className="sec-head video-head">
+              <div className="sec-eyebrow">Tanıtım Filmi</div>
+              <h2 className="display">Platformu bir dakikada tanıyın</h2>
+              <p>
+                Öğrencilerin çalıştığı egzersizler, ölçüm ekranları ve veliye sunulan gelişim
+                raporu — hepsi kısa bir turda.
+              </p>
+            </Reveal>
+            <Reveal className="video-wrap">
+              <VideoPlayer
+                src={VIDEO_SRC}
+                poster={VIDEO_POSTER}
+                label="İdil Hızlı Okuma platform tanıtım videosu"
+              />
+            </Reveal>
           </div>
         </section>
 

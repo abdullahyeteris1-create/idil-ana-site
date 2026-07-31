@@ -40,3 +40,6 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+# ham video kaynakları (sıkıştırılmış çıktı public/video içinde)
+/video-ham/
