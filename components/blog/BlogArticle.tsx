@@ -1,6 +1,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import { MDXRemote } from "next-mdx-remote/rsc";
+import remarkGfm from "remark-gfm";
 import type { MDXComponents } from "mdx/types";
 import type { BlogPost } from "@/lib/blog";
 import { formatBlogDate } from "@/lib/blog";
@@ -48,6 +49,22 @@ const mdxComponents: MDXComponents = {
     );
   },
   hr: () => <hr className="my-10 border-black/10" />,
+  // Tablolar dar ekranda yatay kaydırılır, sayfayı taşırmaz.
+  table: (props) => (
+    <div className="my-8 overflow-x-auto rounded-2xl border border-black/10">
+      <table className="w-full min-w-[420px] border-collapse text-left" {...props} />
+    </div>
+  ),
+  thead: (props) => <thead className="bg-[#f2f7fb]" {...props} />,
+  th: (props) => (
+    <th
+      className="border-b border-black/10 px-5 py-3 text-sm font-extrabold text-[#12142b]"
+      {...props}
+    />
+  ),
+  td: (props) => (
+    <td className="border-b border-black/5 px-5 py-3 leading-7 text-black/70" {...props} />
+  ),
   // Yazı içinde <Callout title="...">metin</Callout> olarak kullanılır.
   Callout: ({ title, children }: { title?: string; children?: React.ReactNode }) => (
     <aside className="my-8 rounded-2xl border border-[#17a398]/25 bg-[#edf9f7] p-6">
@@ -93,7 +110,11 @@ export function BlogArticle({ post }: { post: BlogPost }) {
       </div>
 
       <div className="mx-auto mt-12 max-w-3xl sm:mt-16">
-        <MDXRemote source={post.content} components={mdxComponents} />
+        <MDXRemote
+          source={post.content}
+          components={mdxComponents}
+          options={{ mdxOptions: { remarkPlugins: [remarkGfm] } }}
+        />
 
         <div className="mt-14 flex items-center gap-4 border-t border-black/10 pt-8">
           <div
