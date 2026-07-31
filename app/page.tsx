@@ -137,8 +137,6 @@ const packageData = [
     name: "3 Aylık Paket",
     price: "699 TL",
     shopierUrl: SHOPIER_URLS.threeMonths,
-    badge: "En Çok Tercih Edilen",
-    featured: true,
     features: [
       "3 aylık platform erişimi",
       "Tüm hızlı okuma egzersizleri",
@@ -167,7 +165,8 @@ const packageData = [
     name: "1 Yıllık Paket",
     price: "1.999 TL",
     shopierUrl: SHOPIER_URLS.oneYear,
-    badge: "En Avantajlı",
+    badge: "En Çok Tercih Edilen",
+    featured: true,
     features: [
       "12 aylık platform erişimi",
       "Tüm hızlı okuma eğitim içerikleri",
