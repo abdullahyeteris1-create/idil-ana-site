@@ -94,10 +94,8 @@ export const metadata: Metadata = {
       "max-snippet": -1,
     },
   },
-  icons: {
-    icon: "/favicon.ico",
-    shortcut: "/favicon.ico",
-  },
+  // İkon elle tanımlanmıyor: app/icon.png dosya kuralı Next tarafından
+  // otomatik olarak <link rel="icon"> etiketine dönüştürülüyor.
 };
 
 export default function RootLayout({
