@@ -4,6 +4,7 @@
  */
 
 const GOOGLE_ADS_WHATSAPP_CONVERSION_ID = "AW-18332625430/QHarCN2ro9McEJbU1qVE";
+const GOOGLE_ADS_CONTACT_FORM_CONVERSION_ID = "AW-18332625430/jjbDCNru5-wcEJbUlqVE";
 
 type TrackingWindow = Window & {
   fbq?: (...args: unknown[]) => void;
@@ -79,6 +80,9 @@ export const trackContactFormSuccess = () => {
   const gtag = (window as TrackingWindow).gtag;
   if (typeof gtag === "function") {
     gtag("event", "generate_lead", { form_name: "contact_form" });
+    gtag("event", "conversion", {
+      send_to: GOOGLE_ADS_CONTACT_FORM_CONVERSION_ID,
+    });
   }
 
   trackMetaLead();
