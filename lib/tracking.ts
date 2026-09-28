@@ -11,6 +11,32 @@ type TrackingWindow = Window & {
   gtag?: (...args: unknown[]) => void;
 };
 
+type InitiateCheckoutPayload = {
+  contentName: string;
+  price: string;
+};
+
+/** "1.999 TL" gibi arayüz fiyatlarını Meta'nın beklediği sayısal değere çevirir. */
+export const parsePriceForTracking = (price: string) =>
+  Number(price.replace(/\./g, "").replace(",", ".").replace(/[^\d.-]/g, ""));
+
+export const trackInitiateCheckout = ({ contentName, price }: InitiateCheckoutPayload) => {
+  if (typeof window === "undefined") {
+    return;
+  }
+
+  const value = parsePriceForTracking(price);
+  const fbq = (window as TrackingWindow).fbq;
+
+  if (typeof fbq === "function" && Number.isFinite(value)) {
+    fbq("track", "InitiateCheckout", {
+      value,
+      currency: "TRY",
+      content_name: contentName,
+    });
+  }
+};
+
 export const trackMetaLead = () => {
   if (typeof window === "undefined") {
     return;

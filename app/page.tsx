@@ -26,7 +26,11 @@ import {
   WHATSAPP_URL,
   whatsappUrl,
 } from "@/lib/contact";
-import { trackContactFormSuccess, trackWhatsAppClick } from "@/lib/tracking";
+import {
+  trackContactFormSuccess,
+  trackInitiateCheckout,
+  trackWhatsAppClick,
+} from "@/lib/tracking";
 import { getInitials, reviews } from "@/lib/reviews";
 import { CookiePreferencesButton } from "@/components/CookieConsent";
 import { VideoPlayer } from "@/components/VideoPlayer";
@@ -1173,6 +1177,12 @@ export default function Home() {
                         className="btn btn-primary package-button package-buy-button"
                         target="_blank"
                         rel="noopener noreferrer"
+                        onClick={() =>
+                          trackInitiateCheckout({
+                            contentName: item.name,
+                            price: item.price,
+                          })
+                        }
                         aria-label={`${item.name.replace(/ Paket$/, " Paketi")} Shopier üzerinden satın al`}
                       >
                         <ShoppingBag size={18} aria-hidden="true" />
